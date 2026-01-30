@@ -1,4 +1,4 @@
-import python.frggj as frggj
+import frggj
 
 def main():
     print("Hello from frggj!")
