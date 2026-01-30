@@ -25,8 +25,8 @@
         "type": 3
       },
       "seed": 1234067831,
-      "version": 266,
-      "versionNonce": 1835802180,
+      "version": 267,
+      "versionNonce": 863768388,
       "isDeleted": false,
       "boundElements": [
         {
@@ -36,9 +36,13 @@
         {
           "id": "WWoN9DpQeBZQCySqNbWQq",
           "type": "arrow"
+        },
+        {
+          "id": "spGJssdSSDOZ7oQwkGsgq",
+          "type": "arrow"
         }
       ],
-      "updated": 1769789420833,
+      "updated": 1769790065249,
       "link": null,
       "locked": false
     },
@@ -62,28 +66,28 @@
       "index": "a2V",
       "roundness": null,
       "seed": 126058777,
-      "version": 920,
-      "versionNonce": 2015550551,
+      "version": 941,
+      "versionNonce": 1468665852,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1769786233391,
+      "updated": 1769790007805,
       "link": null,
       "locked": false,
-      "text": "GEngine\n\n- _state\n- _game (GGame)\n- _width\n- _height\n- _scale_factor\n- _pg (pygame)\n- _font\n- _clock\n- _screen\n- _canvas (GCanvas)\n\n--------------------------------------------------------------------------------------------------------\n-> run\n-> _run_intro\n-> _run_menu\n-> _init_game\n-> _\n",
+      "text": "GEngine\n\n- _state (GEngineState)\n- _game (GGame)\n- _width\n- _height\n- _scale_factor\n- _pg (pygame)\n- _font\n- _clock\n- _screen\n- _canvas (GCanvas)\n\n--------------------------------------------------------------------------------------------------------\n-> run\n-> _run_intro\n-> _run_menu\n-> _init_game\n-> _\n",
       "fontSize": 20,
       "fontFamily": 6,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": "o4SlRP9O-q1DmKuvmsl7S",
-      "originalText": "GEngine\n\n- _state\n- _game (GGame)\n- _width\n- _height\n- _scale_factor\n- _pg (pygame)\n- _font\n- _clock\n- _screen\n- _canvas (GCanvas)\n\n--------------------------------------------------------------------------------------------------------\n-> run\n-> _run_intro\n-> _run_menu\n-> _init_game\n-> _\n",
+      "originalText": "GEngine\n\n- _state (GEngineState)\n- _game (GGame)\n- _width\n- _height\n- _scale_factor\n- _pg (pygame)\n- _font\n- _clock\n- _screen\n- _canvas (GCanvas)\n\n--------------------------------------------------------------------------------------------------------\n-> run\n-> _run_intro\n-> _run_menu\n-> _init_game\n-> _\n",
       "autoResize": true,
       "lineHeight": 1.35
     },
     {
       "id": "5xp27Nk_cTb8ampIopidZ",
       "type": "rectangle",
-      "x": -3397.8197638792994,
-      "y": -363.23446702787925,
+      "x": -3399.3394336271563,
+      "y": -329.0566335678396,
       "width": 349.3555209156106,
       "height": 344.788458488688,
       "angle": 0,
@@ -101,8 +105,8 @@
         "type": 3
       },
       "seed": 93752316,
-      "version": 314,
-      "versionNonce": 16395900,
+      "version": 349,
+      "versionNonce": 656383228,
       "isDeleted": false,
       "boundElements": [
         {
@@ -118,15 +122,15 @@
           "type": "arrow"
         }
       ],
-      "updated": 1769788306383,
+      "updated": 1769790137467,
       "link": null,
       "locked": false
     },
     {
       "id": "hESFBmyWiUv8Fn2xMWAYT",
       "type": "text",
-      "x": -3392.8197638792994,
-      "y": -358.23446702787925,
+      "x": -3394.3394336271563,
+      "y": -324.0566335678396,
       "width": 214.39968872070312,
       "height": 135,
       "angle": 0,
@@ -142,11 +146,11 @@
       "index": "aC",
       "roundness": null,
       "seed": 425526084,
-      "version": 185,
-      "versionNonce": 1480716740,
+      "version": 220,
+      "versionNonce": 261791100,
       "isDeleted": false,
       "boundElements": null,
-      "updated": 1769787913561,
+      "updated": 1769790137467,
       "link": null,
       "locked": false,
       "text": "   GGame\n\n- _levels (list of GLevel)\n- _player (GPlayer)\n- ",
@@ -236,6 +240,90 @@
       "verticalAlign": "top",
       "containerId": "QlxFQk42w6Xok8dHHmDMn",
       "originalText": "   GLevel\n\n- _scenes (list of GScene)",
+      "autoResize": true,
+      "lineHeight": 1.35
+    },
+    {
+      "id": "Xl2KzpTgq3KR9sYA-IXhZ",
+      "type": "rectangle",
+      "x": -4545.037547224661,
+      "y": -710.9117908769086,
+      "width": 349.3555209156106,
+      "height": 199,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#ffc9c9",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "index": "aEG",
+      "roundness": {
+        "type": 3
+      },
+      "seed": 938765308,
+      "version": 897,
+      "versionNonce": 736645188,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "id": "vLdgateJ45-ZSAQd3fTb_",
+          "type": "text"
+        },
+        {
+          "id": "8rgY-lHKgUebUeLwxvPpT",
+          "type": "arrow"
+        },
+        {
+          "id": "Ed8G7F860nLnuP4U9yxL6",
+          "type": "arrow"
+        },
+        {
+          "id": "spGJssdSSDOZ7oQwkGsgq",
+          "type": "arrow"
+        }
+      ],
+      "updated": 1769790065249,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "vLdgateJ45-ZSAQd3fTb_",
+      "type": "text",
+      "x": -4540.037547224661,
+      "y": -705.9117908769086,
+      "width": 139.91981506347656,
+      "height": 189,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#b2f2bb",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "index": "aEV",
+      "roundness": null,
+      "seed": 1087726020,
+      "version": 867,
+      "versionNonce": 1040299972,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1769790061299,
+      "link": null,
+      "locked": false,
+      "text": "   GEngineState\n\n- kIntro\n- kMenu\n- kGame\n- kEnd\n",
+      "fontSize": 20,
+      "fontFamily": 6,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "containerId": "Xl2KzpTgq3KR9sYA-IXhZ",
+      "originalText": "   GEngineState\n\n- kIntro\n- kMenu\n- kGame\n- kEnd\n",
       "autoResize": true,
       "lineHeight": 1.35
     },
@@ -1942,10 +2030,10 @@
     {
       "id": "Ed8G7F860nLnuP4U9yxL6",
       "type": "arrow",
-      "x": -3226.319974771344,
-      "y": -623.4459055951702,
-      "width": 1.006889286360547,
-      "height": 258.60067417795034,
+      "x": -3226.2850646353654,
+      "y": -623.4459055951701,
+      "width": 0.6246933719180561,
+      "height": 292.7785076379899,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "#b2f2bb",
@@ -1961,11 +2049,11 @@
         "type": 2
       },
       "seed": 326314052,
-      "version": 176,
-      "versionNonce": 194591612,
+      "version": 211,
+      "versionNonce": 568430076,
       "isDeleted": false,
       "boundElements": null,
-      "updated": 1769788193591,
+      "updated": 1769790137467,
       "link": null,
       "locked": false,
       "points": [
@@ -1974,8 +2062,8 @@
           0
         ],
         [
-          1.006889286360547,
-          258.60067417795034
+          0.6246933719180561,
+          292.7785076379899
         ]
       ],
       "lastCommittedPoint": null,
@@ -1996,10 +2084,10 @@
     {
       "id": "WWoN9DpQeBZQCySqNbWQq",
       "type": "arrow",
-      "x": -3400.25698198638,
-      "y": -179.97553960986397,
-      "width": 252.6639694152227,
-      "height": 10.20933513541081,
+      "x": -3401.0739523188,
+      "y": -150.59289019279038,
+      "width": 249.8275635415839,
+      "height": 2.954992145601409,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "#b2f2bb",
@@ -2015,11 +2103,11 @@
         "type": 2
       },
       "seed": 414322044,
-      "version": 65,
-      "versionNonce": 458026620,
+      "version": 100,
+      "versionNonce": 519466620,
       "isDeleted": false,
       "boundElements": null,
-      "updated": 1769787919090,
+      "updated": 1769790137467,
       "link": null,
       "locked": false,
       "points": [
@@ -2028,8 +2116,8 @@
           0
         ],
         [
-          -252.6639694152227,
-          10.20933513541081
+          -249.8275635415839,
+          2.954992145601409
         ]
       ],
       "lastCommittedPoint": null,
@@ -2818,6 +2906,60 @@
         "elementId": "3ucNfd0D-twk1BSoWZtQG",
         "focus": -0.38840660694358514,
         "gap": 21.219377679802164
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "elbowed": false
+    },
+    {
+      "id": "spGJssdSSDOZ7oQwkGsgq",
+      "type": "arrow",
+      "x": -4364.647776645751,
+      "y": -504.72878994307115,
+      "width": 0.08828123799685272,
+      "height": 120.17296918579581,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#ffc9c9",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "index": "ae",
+      "roundness": {
+        "type": 2
+      },
+      "seed": 636053244,
+      "version": 58,
+      "versionNonce": 243115972,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1769790065249,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -0.08828123799685272,
+          120.17296918579581
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "Xl2KzpTgq3KR9sYA-IXhZ",
+        "focus": -0.03313506755467698,
+        "gap": 7.183000933837491
+      },
+      "endBinding": {
+        "elementId": "o4SlRP9O-q1DmKuvmsl7S",
+        "focus": -0.5796172547468851,
+        "gap": 7.649292192217331
       },
       "startArrowhead": null,
       "endArrowhead": "arrow",
