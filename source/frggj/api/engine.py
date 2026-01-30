@@ -10,7 +10,7 @@ class GEngineState(object):
     kIntro = 1
     kMenu = 2
     kEnd = 3
-    kLevel = 4
+    kGame = 4
 
 
 class GEngine(object):
@@ -24,6 +24,7 @@ class GEngine(object):
         self._scale_factor = 4
         self._pg = pg
         self._pg.init()
+        self._controls = None
         self._font = self._pg.font.SysFont("Arial" , 18 , bold = True)
         self._clock = self._pg.time.Clock()
         if fullscreen:
@@ -46,35 +47,21 @@ class GEngine(object):
             pressed_keys = self._pg.key.get_pressed()
             if self._state == GEngineState.kMenu:
                 if pressed_keys[self._pg.K_RETURN]:
-                    self._state = GEngineState.kLevel
-            """if self._state == GEngineState.kLevel:
-                events = {}
-                self._scene._assets[0].set_active(0)
-                asset_transform = self._scene._assets[0].get_transform()
-                asset_translation = asset_transform.get_translation()
-                asset_eulers = asset_transform.get_eulers()
-                front_axis = asset_transform.get_front()
-                side_axis = asset_transform.get_side()
-                step = np.asarray([0.0, 0.0, 0.0])
+                    self._state = GEngineState.kGame
+            if self._state == GEngineState.kGame:
+                self._controls = {"up": False, "down": False, "left": False, "right": False, "jump": False, "action": False}
                 if pressed_keys[ord('w')]:
-                    self._scene._assets[0].set_active(1)
-                    step = step + front_axis * 1.0
+                    self._controls["up"] = True
                 if pressed_keys[ord('s')]:
-                    self._scene._assets[0].set_active(1)
-                    step = step - front_axis * 1.0
-                if pressed_keys[ord('q')]:
-                    step = step + side_axis * 0.1
-                if pressed_keys[ord('e')]:
-                    step = step - side_axis * 0.1
+                    self._controls["down"] = True
                 if pressed_keys[ord('a')]:
-                    asset_eulers[1] += 3
+                    self._controls["left"] = True
                 if pressed_keys[ord('d')]:
-                    asset_eulers[1] -= 3
-                self._run_game()"""
+                    self._controls["right"] = True
                     
             if self._state == GEngineState.kMenu:
                 self._run_menu()
-            elif self._state == GEngineState.kLevel:
+            elif self._state == GEngineState.kGame:
                 self._run_game()
 
             surf = pg.surfarray.make_surface(self._canvas.get_pixels())
@@ -95,7 +82,7 @@ class GEngine(object):
 
     def _run_game(self):
         self._game.initialize(self._execution_path)
-        self._game.update(self._pg.time.get_ticks())
+        self._game.update(self._pg.time.get_ticks(), self._controls)
         self._game.render(self._canvas, self._pg.time.get_ticks())
         
     def _run_end(self):

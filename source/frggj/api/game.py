@@ -16,9 +16,9 @@ class GGame(object):
         self._assets = {}
         self._camera = None
 
-    def update(self, elapsed_time):
+    def update(self, elapsed_time, controls):
         if self._player:
-            self._player.update(elapsed_time)
+            self._player.update(elapsed_time, controls)
     
     def add_level(self, level : GLevel) -> None:
         if self._levels is None:
