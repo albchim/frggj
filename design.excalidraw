@@ -1,0 +1,86 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor",
+  "elements": [
+    {
+      "id": "o4SlRP9O-q1DmKuvmsl7S",
+      "type": "rectangle",
+      "x": -4554.703683782256,
+      "y": -376.906528565058,
+      "width": 903,
+      "height": 1031,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#b2f2bb",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "index": "a2",
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1234067831,
+      "version": 262,
+      "versionNonce": 283466551,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "-gIf4QQEmAtUfbCwtylCy"
+        }
+      ],
+      "updated": 1769786233391,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "-gIf4QQEmAtUfbCwtylCy",
+      "type": "text",
+      "x": -4549.703683782256,
+      "y": -371.906528565058,
+      "width": 888.1593017578125,
+      "height": 540,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "index": "a2V",
+      "roundness": null,
+      "seed": 126058777,
+      "version": 920,
+      "versionNonce": 2015550551,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1769786233391,
+      "link": null,
+      "locked": false,
+      "text": "GEngine\n\n- _state\n- _game (GGame)\n- _width\n- _height\n- _scale_factor\n- _pg (pygame)\n- _font\n- _clock\n- _screen\n- _canvas (GCanvas)\n\n--------------------------------------------------------------------------------------------------------\n-> run\n-> _run_intro\n-> _run_menu\n-> _init_game\n-> _\n",
+      "fontSize": 20,
+      "fontFamily": 6,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "containerId": "o4SlRP9O-q1DmKuvmsl7S",
+      "originalText": "GEngine\n\n- _state\n- _game (GGame)\n- _width\n- _height\n- _scale_factor\n- _pg (pygame)\n- _font\n- _clock\n- _screen\n- _canvas (GCanvas)\n\n--------------------------------------------------------------------------------------------------------\n-> run\n-> _run_intro\n-> _run_menu\n-> _init_game\n-> _\n",
+      "autoResize": true,
+      "lineHeight": 1.35
+    }
+  ],
+  "appState": {
+    "gridSize": 20,
+    "gridStep": 5,
+    "gridModeEnabled": false,
+    "viewBackgroundColor": "#ffffff"
+  },
+  "files": {}
+}
