@@ -1,6 +1,6 @@
 from typing import Optional
 
-from utils.constants import GEvent
+from frggj.api.constants import GEvent
 
 
 class GState(object):
@@ -46,7 +46,7 @@ class IdleState(GState):
             return "run_left" if event[GEvent.kRun] else "walk_left"
         elif event == GEvent.kOnGround and event == GEvent.kJump:
             return "jump"
-        return self.name
+        return "{0}_{1}".format(self.name, self.direction)
 
 
 class WalkState(GState):

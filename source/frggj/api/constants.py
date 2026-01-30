@@ -1,5 +1,5 @@
 
-def GEvent(object):
+class GEvent(object):
     kCollision = 1
     kHit = 2
     kDeath = 3
@@ -9,3 +9,4 @@ def GEvent(object):
     kJump = 7
     kRun = 8
     kOnGround = 9
+    kAttack = 10

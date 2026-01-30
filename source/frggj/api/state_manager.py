@@ -1,6 +1,6 @@
 from typing import Dict, Optional
 
-from state import State, IdleState, WalkState, TurnState, RunState, JumpState, AttackState
+from frggj.api.state import GState, IdleState, WalkState, TurnState, RunState, JumpState, AttackState
 
 BASE_STATES = {'idle_left': IdleState("left"), 'idle_right': IdleState("right"),
                'walk_left': WalkState("left"), 'walk_right': WalkState("right"),
@@ -13,7 +13,7 @@ BASE_STATES = {'idle_left': IdleState("left"), 'idle_right': IdleState("right"),
 class GStateManager(object):
     """A small finite state machine."""
 
-    def __init__(self, states: Dict[str, State], initial: str) -> None:
+    def __init__(self, states: Dict[str, GState], initial: str) -> None:
         self._states = states
         self._current_state = initial
 
@@ -21,12 +21,13 @@ class GStateManager(object):
         if self._current_state not in self._states:
             raise KeyError(f"Unknown initial state: {self._current_state}")
         self._states[self._current_state].on_enter(None)
+        print(self._current_state)
 
-    def get_current_state(self) -> State:
+    def get_current_state(self) -> GState:
         return self._states[self._current_state]
 
     def animation_name(self) -> str:
-        return getattr(self.get_current_state, "animation_name", self._current_state)
+        return getattr(self.get_current_state(), "animation_name", self._current_state)
 
     def transition(self, new_state: str) -> None:
         if new_state == self._current_state:
@@ -37,9 +38,10 @@ class GStateManager(object):
         self._states[prev].on_exit(new_state)
         self._current_state = new_state
         self._states[new_state].on_enter(prev)
+        print(new_state)
 
     def handle_event(self, event: dict) -> None:
-        nxt = self.get_current_state.handle_event(event)
+        nxt = self.get_current_state().handle_event(event)
         if nxt:
             self.transition(nxt)
 
