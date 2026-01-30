@@ -4,7 +4,7 @@ import numpy as np
 from groucho.canvas import GCanvas
 from groucho.scene import GScene
 
-class GState(object):
+class GGameState(object):
     kIntro = 1
     kMenu = 2
     kEnd = 3
@@ -13,7 +13,7 @@ class GState(object):
 
 class GEngine(object):
     def __init__(self, fullscreen=False):
-        self._state = GState.kMenu
+        self._state = GGameState.kMenu
         self._game = 
 
         self._width = 426
