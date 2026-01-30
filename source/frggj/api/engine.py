@@ -14,7 +14,8 @@ class GEngineState(object):
 
 
 class GEngine(object):
-    def __init__(self, fullscreen=False):
+    def __init__(self, execution_path, fullscreen=False):
+        self._execution_path = execution_path
         self._state = GEngineState.kMenu
         self._game = GGame()
 
@@ -46,10 +47,8 @@ class GEngine(object):
             if self._state == GEngineState.kMenu:
                 if pressed_keys[self._pg.K_RETURN]:
                     self._state = GEngineState.kLevel
-            if self._state == GEngineState.kLevel:
-                self._run_game()
-
-                """self._init_level()
+            """if self._state == GEngineState.kLevel:
+                events = {}
                 self._scene._assets[0].set_active(0)
                 asset_transform = self._scene._assets[0].get_transform()
                 asset_translation = asset_transform.get_translation()
@@ -71,9 +70,7 @@ class GEngine(object):
                     asset_eulers[1] += 3
                 if pressed_keys[ord('d')]:
                     asset_eulers[1] -= 3
-                asset_transform.set_translation(asset_translation + step)
-                asset_transform.set_eulers(asset_eulers)
-                self._scene._assets[0].set_transform(asset_transform)"""
+                self._run_game()"""
                     
             if self._state == GEngineState.kMenu:
                 self._run_menu()
@@ -96,25 +93,8 @@ class GEngine(object):
         self._canvas.fill(255, 0, 0)
         a = 0
 
-    """def _init_game(self):
-        if self._scene is None:
-            self._scene = GScene()
-            self._scene.set_camera(np.asarray([
-                [1.0, 0.0, 0.0, -3.0],
-                [0.0, 0.9848077, -0.1736482, 7.5],
-                [0.0, 0.1736482, 0.9848077, -15.0],
-                [0.0, 0.0, 0.0, 1.0]]))
-            self._scene.add_asset("merchant", "D:/projects/groucho/assets/merchant/asset.json")
-            self._scene._assets[0]._transform._matrix[0] = np.asarray([1.0, 0.0, 0.0, 0])
-            self._scene._assets[0]._transform._matrix[1] = np.asarray([0.0, 1.0, 0.0, 0])
-            self._scene._assets[0]._transform._matrix[2] = np.asarray([0.0, 0.0, 1.0, 0])
-            self._scene.add_asset("terrain", "D:/projects/groucho/assets/desert_terrain/asset.json")
-            # self._scene.add_asset("merchant", "D:/projects/groucho/assets/desert_tavern/asset.json")
-
-            self._scene.get_camera().set_parent_constraint(self._scene._assets[0].get_transform())"""
-
     def _run_game(self):
-        self._game.initialize()
+        self._game.initialize(self._execution_path)
         self._game.update(self._pg.time.get_ticks())
         self._game.render(self._canvas, self._pg.time.get_ticks())
         

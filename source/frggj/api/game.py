@@ -42,10 +42,11 @@ class GGame(object):
         canvas.z_reset()
         self.get_current_level().get_current_scene().render(canvas, self._player, self._camera, time)
     
-    def initialize(self):
+    def initialize(self, execution_path):
         if self._initialized == False:
+            assets_path = "{0}/../../assets".format(execution_path)
             player_asset = GAsset("player")
-            player_asset.load("D:/projects/groucho/assets/merchant/asset.json")
+            player_asset.load("{0}/merchant/asset.json".format(assets_path))
             player_spawn = GTransform()
             self._player = GPlayer("player", 5, player_asset, player_spawn)
             self._camera = GCamera()
