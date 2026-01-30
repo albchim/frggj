@@ -1,5 +1,5 @@
-import frggj
 from frggj.api.engine import GEngine
+
 
 def main():
     print("Hello from frggj!")

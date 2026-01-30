@@ -78,7 +78,7 @@ class GEngine(object):
             if self._state == GEngineState.kMenu:
                 self._run_menu()
             elif self._state == GEngineState.kLevel:
-                self._run_level()
+                self._run_game()
 
             surf = pg.surfarray.make_surface(self._canvas.get_pixels())
             surf = self._pg.transform.scale(surf, (self._width * self._scale_factor, self._height * self._scale_factor))
@@ -89,11 +89,11 @@ class GEngine(object):
             self._pg.display.update()
 
     def run_intro(self):
-        self._canvas.fill(50, 127, 200)
+        self._canvas.fill(0, 255, 0)
         a = 0
 
     def _run_menu(self):
-        self._canvas.fill(50, 127, 200)
+        self._canvas.fill(255, 0, 0)
         a = 0
 
     """def _init_game(self):
@@ -114,9 +114,9 @@ class GEngine(object):
             self._scene.get_camera().set_parent_constraint(self._scene._assets[0].get_transform())"""
 
     def _run_game(self):
-        self._canvas.fill(50, 127, 200)
-        self._canvas.z_reset()
-        self._scene.render(self._canvas, self._pg.time.get_ticks())
+        self._game.initialize()
+        self._game.update(self._pg.time.get_ticks())
+        self._game.render(self._canvas, self._pg.time.get_ticks())
         
     def _run_end(self):
         a = 0
