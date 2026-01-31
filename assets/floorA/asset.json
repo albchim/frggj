@@ -1,4 +1,7 @@
 {
     "mesh": "geo.json",
-    "texture": "color.png"
+    "texture": "color.png",
+    "skeleton": null,
+    "animation": null,
+    "animation_map": null
 }

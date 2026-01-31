@@ -8,9 +8,10 @@ from frggj.api.constants import GControl, GEvent
 class GEntityType(object):
     kPlayer = 0
     kEnemy = 1
-    kScenery = 2
+    kSet = 2
     kItem = 3
     kPlatform = 4
+    kBackground = 5
 
 
 class GEntity(object):
@@ -130,3 +131,43 @@ class GEnemy(GEntity):
     
     def get_type(self):
         return GEntityType.kEnemy
+
+
+class GPlatform(GEntity):
+    def __init__(self, name, asset=None, transform=None):
+        super().__init__(name, asset, transform)
+        self._state = None
+        self._active_animation = 1
+        
+    def get_type(self):
+        return GEntityType.kPlatform
+
+
+class GSet(GEntity):
+    def __init__(self, name, asset=None, transform=None):
+        super().__init__(name, asset, transform)
+        self._state = None
+        self._active_animation = 1
+        
+    def get_type(self):
+        return GEntityType.kSet
+
+
+class GItem(GEntity):
+    def __init__(self, name, asset=None, transform=None):
+        super().__init__(name, asset, transform)
+        self._state = None
+        self._active_animation = 1
+        
+    def get_type(self):
+        return GEntityType.kItem
+
+
+class GBackground(GEntity):
+    def __init__(self, name, asset=None, transform=None):
+        super().__init__(name, asset, transform)
+        self._state = None
+        self._active_animation = 1
+        
+    def get_type(self):
+        return GEntityType.kBackground

@@ -1,7 +1,9 @@
 # scene
-from frggj.api.entity import GEntityType
+import json
+from frggj.api.entity import GEntityType, GPlatform, GSet, GBackground, GItem
 import numpy as np
 from frggj.api.utils import invert_matrix
+from frggj.api.transform import GTransform
 from numba import njit, jit
 
 
@@ -9,25 +11,53 @@ class GScene(object):
     def __init__(self):
         self._content = {
             "enemies": {},
-            "sceneries": {},
+            "set": {},
             "items": {},
-            "platforms": {}
+            "platforms": {},
+            "background": {}
         }
     
     def update(self, elapsed_time):
         for entity_type in self._content.keys():
             for entity_name in self._content[entity_type]:
                 self._content[entity_type][entity_name].update(elapsed_time)
+    
+    def load(self, scene_description_filepath, assets_lib):
+        with open(scene_description_filepath) as json_data:
+            content_data = json.load(json_data)
+            json_data.close()
+            for entity_type in content_data.keys():
+                for entity_name in content_data[entity_type].keys():
+                    asset_name = content_data[entity_type][entity_name]["asset"]
+                    entity_translation = content_data[entity_type][entity_name]["translate"]
+                    entity_rotation = content_data[entity_type][entity_name]["rotation"]
+                    entity_asset = assets_lib[asset_name]
+                    entity_transform = GTransform()
+                    entity_transform.set_translation(entity_translation)
+                    entity_transform.set_eulers(entity_rotation)
+                    new_entity = None
+                    if entity_type == "platforms":
+                        new_entity = GPlatform(entity_name, entity_asset, entity_transform)
+                    if entity_type == "set":
+                        new_entity = GSet(entity_name, entity_asset, entity_transform)
+                    if entity_type == "item":
+                        new_entity = GItem(entity_name, entity_asset, entity_transform)
+                    if entity_type == "background":
+                        new_entity = GBackground(entity_name, entity_asset, entity_transform)
+                    self.add_entity(new_entity)
+
 
     def add_entity(self, entity) -> None:
         if entity.get_type() == GEntityType.kEnemy:
             self._content["enemies"][entity.get_name()] = entity
-        elif entity.get_type() == GEntityType.kScenery:
-            self._content["sceneries"][entity.get_name()] = entity
+        elif entity.get_type() == GEntityType.kSet:
+            self._content["set"][entity.get_name()] = entity
         elif entity.get_type() == GEntityType.kItem:
             self._content["items"][entity.get_name()] = entity
         elif entity.get_type() == GEntityType.kPlatform:
             self._content["platforms"][entity.get_name()] = entity
+        elif entity.get_type() == GEntityType.kPlatform:
+            self._content["background"][entity.get_name()] = entity
     
     def get_entity(self, entity_type, entity_name):
         return self._content[entity_type][entity_name]
@@ -35,14 +65,17 @@ class GScene(object):
     def get_enemies(self):
         return list(self._content["enemies"].values())
     
-    def get_sceneries(self):
-        return self._content["sceneries"].values()
+    def get_set(self):
+        return list(self._content["set"].values())
     
     def get_items(self):
-        return self._content["items"].values()
+        return list(self._content["items"].values())
     
     def get_platforms(self):
-        return self._content["platforms"].values()
+        return list(self._content["platforms"].values())
+    
+    def get_background(self):
+        return list(self._content["background"].values())
 
     def render(self, canvas, player, camera, time):
         player_transform = player.get_transform()
@@ -54,7 +87,7 @@ class GScene(object):
         # triangle_indices = np.asarray(range(len(self._assets[1].get_mesh().get_triangles())))
         player_transform.set_translation(player_translation)
 
-        rendereables = [player] + self.get_enemies()
+        rendereables = [player] + self.get_enemies() + self.get_platforms() + self.get_background() + self.get_set()
 
         for entity in rendereables:
             asset = entity.get_asset()

@@ -6,6 +6,7 @@ from frggj.api.entity import GEnemy
 from frggj.api.asset import GAsset
 from frggj.api.transform import GTransform
 from frggj.api.camera import GCamera
+import os
 import numpy as np
 
 class GGame(object):
@@ -47,21 +48,43 @@ class GGame(object):
     def initialize(self, execution_path):
         if self._initialized == False:
             assets_path = "{0}/../../assets".format(execution_path)
-            player_asset = GAsset("player")
-            player_asset.load("{0}/merchant/asset.json".format(assets_path))
+            self._load_assets(assets_path)
+            levels_path = "{0}/../../levels".format(execution_path)
+            self._load_levels(levels_path)
+
+            player_asset = self._assets["merchant"]
             player_spawn = GTransform()
             self._player = GPlayer("player", 5, player_asset, player_spawn)
             self._camera = GCamera()
             self._camera.set_translation([-30.0, 3.0, 0.0])
             self._camera.set_eulers([0.0, 90, 0.0])
 
-            dummy_level = GLevel()
+            """dummy_level = GLevel()
             dummy_scene = GScene()
+            enemy_asset = self._assets["merchant"]
             enemy1_spawn = GTransform()
             enemy1_spawn.set_translation([0.0, 0.0, 0.0])
-            enemy1 = GEnemy("enemy1", 5, player_asset, enemy1_spawn)
+            enemy1 = GEnemy("enemy1", 5, enemy_asset, enemy1_spawn)
             dummy_scene.add_entity(enemy1)
 
             dummy_level.add_scene(dummy_scene)
-            self.add_level(dummy_level)
+            self.add_level(dummy_level)"""
             self._initialized = True
+    
+    def _load_assets(self, assets_path):
+        assets = os.listdir(assets_path)
+        for asset_name in assets:
+            print(asset_name)
+            new_asset = GAsset(asset_name)
+            new_asset.load("{0}/{1}/asset.json".format(assets_path, asset_name))
+            self._assets[asset_name] = new_asset
+        
+    def _load_levels(self, levels_path):
+        levels = os.listdir(levels_path)
+        self._levels = [None] * len(levels)
+        for level_name in levels:
+            level_index = int(level_name[5:]) - 1
+            new_level = GLevel(level_name)
+            new_level.load(levels_path, self._assets)
+            self._levels[level_index] = new_level
+        

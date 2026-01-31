@@ -176,7 +176,10 @@ def export_skeleton(mesh_name, asset_filepath):
 def export_manifest(mesh_filepath, texture_filepath, asset_path):
     manifest = {
         "mesh": mesh_filepath,
-        "texture": texture_filepath}
+        "texture": texture_filepath,
+        "skeleton": None,
+        "animation": None,
+        "animation_map": None}
     export_filepath = os.path.join(asset_path, "asset.json")
     with open(export_filepath, 'w', encoding='utf-8') as f:
         json.dump(manifest, f, ensure_ascii=False, indent=4)
@@ -193,7 +196,8 @@ def export_content(mesh_name, export_folder, skeleton=False, anim=False):
     print("Asset {0} exported to file {1}".format(mesh_name, x))
 
 
-export_folder = "C:/dev/gitrepos/frggj/levels/level1/screen1"
+assets_export_folder = "C:/dev/gitrepos/frggj/assets/"
+scene_export_folder = "C:/dev/gitrepos/frggj/levels/level1/screen1"
 
 set_group = cmds.ls("|set")
 platforms_group = cmds.ls("|platforms")
@@ -208,10 +212,10 @@ if set_group:
         if len(shapes) == 1 and shapes[0][-5:]=="Shape":
             filtered_shape_name = shapes[0][:-5].rpartition("|")[2]
             if filtered_shape_name not in exported_assets:
-                export_content(filtered_shape_name, export_folder)
+                export_content(filtered_shape_name, assets_export_folder)
                 exported_assets.append(filtered_shape_name)
-            instance_translation = cmds.xform(filtered_shape_name, query=True, translation=True, worldSpace=True)
-            instance_rotation = cmds.xform(filtered_shape_name, query=True, rotation=True, worldSpace=True)
+            instance_translation = cmds.xform(asset_transform, query=True, translation=True, worldSpace=True)
+            instance_rotation = cmds.xform(asset_transform, query=True, rotation=True, worldSpace=True)
             instance_data = {
                 "asset": filtered_shape_name,
                 "translate": instance_translation,
@@ -224,10 +228,10 @@ if platforms_group:
         if len(shapes) == 1 and shapes[0][-5:]=="Shape":
             filtered_shape_name = shapes[0][:-5].rpartition("|")[2]
             if filtered_shape_name not in exported_assets:
-                export_content(filtered_shape_name, export_folder)
+                export_content(filtered_shape_name, assets_export_folder)
                 exported_assets.append(filtered_shape_name)
-            instance_translation = cmds.xform(filtered_shape_name, query=True, translation=True, worldSpace=True)
-            instance_rotation = cmds.xform(filtered_shape_name, query=True, rotation=True, worldSpace=True)
+            instance_translation = cmds.xform(asset_transform, query=True, translation=True, worldSpace=True)
+            instance_rotation = cmds.xform(asset_transform, query=True, rotation=True, worldSpace=True)
             instance_data = {
                 "asset": filtered_shape_name,
                 "translate": instance_translation,
@@ -240,16 +244,16 @@ if background_group:
         if len(shapes) == 1 and shapes[0][-5:]=="Shape":
             filtered_shape_name = shapes[0][:-5].rpartition("|")[2]
             if filtered_shape_name not in exported_assets:
-                export_content(filtered_shape_name, export_folder)
+                export_content(filtered_shape_name, assets_export_folder)
                 exported_assets.append(filtered_shape_name)
-            instance_translation = cmds.xform(filtered_shape_name, query=True, translation=True, worldSpace=True)
-            instance_rotation = cmds.xform(filtered_shape_name, query=True, rotation=True, worldSpace=True)
+            instance_translation = cmds.xform(asset_transform, query=True, translation=True, worldSpace=True)
+            instance_rotation = cmds.xform(asset_transform, query=True, rotation=True, worldSpace=True)
             instance_data = {
                 "asset": filtered_shape_name,
                 "translate": instance_translation,
                 "rotation": instance_rotation}
             scene_layout["background"][asset_transform] = instance_data
 
-export_filepath = os.path.join(export_folder, "description.json")
+export_filepath = os.path.join(scene_export_folder, "description.json")
 with open(export_filepath, 'w', encoding='utf-8') as f:
     json.dump(scene_layout, f, ensure_ascii=False, indent=4)
