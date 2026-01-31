@@ -39,7 +39,7 @@ class GEntity(object):
             translation = self._transform.get_translation()
             translation += self._direction * self._velocity * elapsed_time
             self._transform.set_translation(translation)
-            self._velocity = max(self._velocity - elapsed_time * 20.0, 0)
+            self._velocity = max(self._velocity - elapsed_time * 50.0, 0)
             if self._direction[2] > 0:
                 self._transform.set_eulers([0.0, 0.0, 0.0])
             if self._direction[2] < 0:
