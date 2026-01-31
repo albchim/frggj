@@ -61,7 +61,7 @@ class GScene(object):
             self._content["items"][entity.get_name()] = entity
         elif entity.get_type() == GEntityType.kPlatform:
             self._content["platforms"][entity.get_name()] = entity
-        elif entity.get_type() == GEntityType.kPlatform:
+        elif entity.get_type() == GEntityType.kBackground:
             self._content["background"][entity.get_name()] = entity
     
     def get_entity(self, entity_type, entity_name):
@@ -135,7 +135,6 @@ def distance_cull(triangle_indices, points, triangles, camera, max_distance):
         dist2 = dot_3d(delta2, delta2)
         if min(dist0, dist1, dist2) < square_max_distance:
             triangle_indices.pop(inv_index)
-    print(len(triangle_indices))
 
 
 @njit()
@@ -316,7 +315,7 @@ def draw_text_triangle(frame, z_buffer, texture, text_size, shade, start, middle
                     v = (v1 + delta_x*v_slope)*z # multiply by z to go back to uv space
                     if min(u, v) >= 0 and max(u, v) <= 1: # don't render out of bounds
                         z_buffer[x][y] = z
-                        fog = 1.0 - min(z, 500.0) / 500.0
+                        fog = 1.0  # - min(z, 3000.0) / 3000.0
                         frame[x, y] = shade*fog*texture[int(u*text_size[0])][int(v*text_size[1])]
 
 
