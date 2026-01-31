@@ -1,6 +1,6 @@
 {
-    "mesh": "D:/projects/groucho/assets/merchant\\geo.json",
-    "texture": "D:/projects/groucho/assets/merchant\\color.png",
-    "skeleton": "D:/projects/groucho/assets/merchant\\skeleton.json",
-    "animation": "D:/projects/groucho/assets/merchant\\animation.json"
+    "mesh": "geo.json",
+    "texture": "color.png",
+    "skeleton": "skeleton.json",
+    "animation": "animation.json"
 }
