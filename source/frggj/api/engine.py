@@ -23,6 +23,7 @@ class GEngine(object):
         self._width = 426
         self._height = 240
         self._scale_factor = 4
+        self._elapsed_time = 0
         self._pg = pg
         self._pg.init()
         self._controls = None
@@ -39,7 +40,7 @@ class GEngine(object):
     def _run(self):
         running = True
         while running:
-            elapsed_time = self._clock.tick(60)*0.001
+            self._elapsed_time = self._clock.tick(60)*0.001
             for event in self._pg.event.get():
                 if event.type == self._pg.QUIT:
                     running = False
@@ -84,7 +85,7 @@ class GEngine(object):
 
     def _run_game(self):
         self._game.initialize(self._execution_path)
-        self._game.update(self._pg.time.get_ticks(), self._controls)
+        self._game.update(self._elapsed_time, self._controls)
         self._game.render(self._canvas, self._pg.time.get_ticks())
         
     def _run_end(self):

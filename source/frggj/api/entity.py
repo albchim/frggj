@@ -23,9 +23,9 @@ class GEntity(object):
     def update(self, elapsed_time):
         if self._velocity > 0:
             translation = self._transform.get_translation()
-            translation += self._direction * self._velocity * elapsed_time * 0.0001
+            translation += self._direction * self._velocity * elapsed_time
             self._transform.set_translation(translation)
-            self._velocity = max(self._velocity - elapsed_time, 0)
+            self._velocity = max(self._velocity - elapsed_time * 20.0, 0)
     
     def set_name(self, name):
         self._name = name
@@ -73,6 +73,6 @@ class GPlayer(GEntity):
         elif self._state_manager.get_current_state().direction == "left":
             self._direction = np.asarray([0, 0, -1])
         if self._state_manager.get_current_state().name == "walk":
-            self._velocity = 0.5
+            self._velocity = 1.5
         elif self._state_manager.get_current_state().name == "run":
-            self._velocity = 1
+            self._velocity = 3
