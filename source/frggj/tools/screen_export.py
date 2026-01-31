@@ -173,63 +173,10 @@ def export_skeleton(mesh_name, asset_filepath):
     return "skeleton.json"
 
 
-def export_animation(mesh_name, takes, asset_path):
-    takes_data = []
-    shapes = cmds.listRelatives(mesh_name, shapes=True, fullPath=True)
-    shape = shapes[0]
-    history = cmds.listHistory(shape, pruneDagObjects=True) or []
-    skinclusters = []
-    for node in history:
-        if cmds.nodeType(node) == "skinCluster":
-            skinclusters.append(cmds.ls(node, long=True)[0])
-    skinclusters = list(set(skinclusters))
-    skin_joints = None
-    if len(skinclusters) == 1:
-        skin_joints = cmds.skinCluster(skinclusters[0], query=True, influence=True) or []
-    if skin_joints:
-        animation_map_data = {}
-        for take_index in range(len(takes)):
-            take = takes[take_index]
-            animation_map_data[take[0]] = take_index
-            anim_frames = []
-            for frame in range(take[1], take[2]+1):
-                cmds.currentTime(frame)
-                frame_pose = []
-                for joint_name in skin_joints:
-                    joint_matrix = cmds.xform(joint_name, query=True, matrix=True, worldSpace=True)
-                    frame_pose.append([
-                        [joint_matrix[0], joint_matrix[4], joint_matrix[8], joint_matrix[12]],
-                        [joint_matrix[1], joint_matrix[5], joint_matrix[9], joint_matrix[13]],
-                        [joint_matrix[2], joint_matrix[6], joint_matrix[10], joint_matrix[14]],
-                        [joint_matrix[3], joint_matrix[7], joint_matrix[11], joint_matrix[15]]
-                    ])
-                anim_frames.append(frame_pose)
-            takes_data.append({
-                "length": take[2] - take[1],
-                "loopable": take[3],
-                "frames": anim_frames})
-        data = {
-            "fps": 24,
-            "takes": takes_data
-        }
-        export_anim_filepath = os.path.join(asset_path, "animation.json")
-        with open(export_anim_filepath, 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
-        
-        export_map_filepath = os.path.join(asset_path, "animation_map.json")
-        with open(export_map_filepath, 'w', encoding='utf-8') as f:
-            json.dump(animation_map_data, f, ensure_ascii=False, indent=4)
-        return "animation.json", "animation_map.json"
-    return None, None
-
-
-def export_manifest(mesh_filepath, texture_filepath, skeleton_filepath, anim_filepath, anim_map_filepath, asset_path):
+def export_manifest(mesh_filepath, texture_filepath, asset_path):
     manifest = {
         "mesh": mesh_filepath,
-        "texture": texture_filepath,
-        "skeleton": skeleton_filepath,
-        "animation": anim_filepath,
-        "animation_map": anim_map_filepath}
+        "texture": texture_filepath}
     export_filepath = os.path.join(asset_path, "asset.json")
     with open(export_filepath, 'w', encoding='utf-8') as f:
         json.dump(manifest, f, ensure_ascii=False, indent=4)
@@ -242,25 +189,67 @@ def export_content(mesh_name, export_folder, skeleton=False, anim=False):
         os.mkdir(asset_path)
     mesh_filepath = export_mesh(mesh_name, asset_path)
     texture_filepath = export_texture(mesh_name, asset_path)
-    skeleton_filepath = None
-    anim_filepath = None
-    if skeleton:
-        skeleton_filepath = export_skeleton(mesh_name, asset_path)
-    if anim:
-        anim_export_info = []
-        for anim_tag_index in range(cmds.getAttr("{0}.animEntries".format(mesh_name), size=True)):
-            anim_name = cmds.getAttr("{0}.animEntries[{1}].name".format(mesh_name, anim_tag_index))
-            anim_start = cmds.getAttr("{0}.animEntries[{1}].startFrame".format(mesh_name, anim_tag_index))
-            anim_end = cmds.getAttr("{0}.animEntries[{1}].endFrame".format(mesh_name, anim_tag_index))
-            anim_loop = cmds.getAttr("{0}.animEntries[{1}].loopable".format(mesh_name, anim_tag_index))
-            anim_export_info.append([anim_name, anim_start, anim_end, anim_loop])
-        anim_filepath, anim_map_filepath = export_animation(mesh_name, anim_export_info, asset_path)
-    x = export_manifest(mesh_filepath, texture_filepath, skeleton_filepath, anim_filepath, anim_map_filepath, asset_path)
+    x = export_manifest(mesh_filepath, texture_filepath, asset_path)
     print("Asset {0} exported to file {1}".format(mesh_name, x))
 
 
-export_folder = "C:/dev/gitrepos/frggj/assets/"
-selection = cmds.ls(selection=True)
-for mesh_name in selection:
-    is_animated = cmds.getAttr("{0}.animEntries".format(mesh_name), size=True) > 0
-    export_content(mesh_name, export_folder, is_animated, is_animated)
+export_folder = "C:/dev/gitrepos/frggj/levels/level1/screen1"
+
+set_group = cmds.ls("|set")
+platforms_group = cmds.ls("|platforms")
+background_group = cmds.ls("|background")
+
+exported_assets = []
+scene_layout = {"set": {}, "platforms": {}, "background": {}}
+if set_group:
+    assets = cmds.listRelatives(set_group)
+    for asset_transform in assets:
+        shapes = cmds.listRelatives(asset_transform, shapes=True, fullPath=True, noIntermediate=True) or []
+        if len(shapes) == 1 and shapes[0][-5:]=="Shape":
+            filtered_shape_name = shapes[0][:-5].rpartition("|")[2]
+            if filtered_shape_name not in exported_assets:
+                export_content(filtered_shape_name, export_folder)
+                exported_assets.append(filtered_shape_name)
+            instance_translation = cmds.xform(filtered_shape_name, query=True, translation=True, worldSpace=True)
+            instance_rotation = cmds.xform(filtered_shape_name, query=True, rotation=True, worldSpace=True)
+            instance_data = {
+                "asset": filtered_shape_name,
+                "translate": instance_translation,
+                "rotation": instance_rotation}
+            scene_layout["set"][asset_transform] = instance_data
+if platforms_group:
+    assets = cmds.listRelatives(platforms_group)
+    for asset_transform in assets:
+        shapes = cmds.listRelatives(asset_transform, shapes=True, fullPath=True, noIntermediate=True) or []
+        if len(shapes) == 1 and shapes[0][-5:]=="Shape":
+            filtered_shape_name = shapes[0][:-5].rpartition("|")[2]
+            if filtered_shape_name not in exported_assets:
+                export_content(filtered_shape_name, export_folder)
+                exported_assets.append(filtered_shape_name)
+            instance_translation = cmds.xform(filtered_shape_name, query=True, translation=True, worldSpace=True)
+            instance_rotation = cmds.xform(filtered_shape_name, query=True, rotation=True, worldSpace=True)
+            instance_data = {
+                "asset": filtered_shape_name,
+                "translate": instance_translation,
+                "rotation": instance_rotation}
+            scene_layout["platforms"][asset_transform] = instance_data
+if background_group:
+    assets = cmds.listRelatives(background_group)
+    for asset_transform in assets:
+        shapes = cmds.listRelatives(asset_transform, shapes=True, fullPath=True, noIntermediate=True) or []
+        if len(shapes) == 1 and shapes[0][-5:]=="Shape":
+            filtered_shape_name = shapes[0][:-5].rpartition("|")[2]
+            if filtered_shape_name not in exported_assets:
+                export_content(filtered_shape_name, export_folder)
+                exported_assets.append(filtered_shape_name)
+            instance_translation = cmds.xform(filtered_shape_name, query=True, translation=True, worldSpace=True)
+            instance_rotation = cmds.xform(filtered_shape_name, query=True, rotation=True, worldSpace=True)
+            instance_data = {
+                "asset": filtered_shape_name,
+                "translate": instance_translation,
+                "rotation": instance_rotation}
+            scene_layout["background"][asset_transform] = instance_data
+
+export_filepath = os.path.join(export_folder, "description.json")
+with open(export_filepath, 'w', encoding='utf-8') as f:
+    json.dump(scene_layout, f, ensure_ascii=False, indent=4)

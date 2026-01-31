@@ -1,0 +1,684 @@
+{
+    "set": {
+        "wallA": {
+            "asset": "wallA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "columnA": {
+            "asset": "columnA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "columnA1": {
+            "asset": "columnA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "columnA2": {
+            "asset": "columnA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "columnA3": {
+            "asset": "columnA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "columnA4": {
+            "asset": "columnA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "columnA5": {
+            "asset": "columnA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "columnA6": {
+            "asset": "columnA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "columnA7": {
+            "asset": "columnA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "columnA8": {
+            "asset": "columnA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "wallA1": {
+            "asset": "wallA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "wallA2": {
+            "asset": "wallA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "wallA3": {
+            "asset": "wallA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "wallA4": {
+            "asset": "wallA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "wallA5": {
+            "asset": "wallA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "wallA6": {
+            "asset": "wallA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "wallA7": {
+            "asset": "wallA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "wallA8": {
+            "asset": "wallA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "wallA9": {
+            "asset": "wallA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "wallA10": {
+            "asset": "wallA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "wallA11": {
+            "asset": "wallA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "wallA12": {
+            "asset": "wallA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "wallA13": {
+            "asset": "wallA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "platforms": {
+        "floorA": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA1": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA2": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA3": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA4": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA5": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA6": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA7": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA8": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA9": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA10": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA11": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA12": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA13": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA14": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA15": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA16": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA17": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA18": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA19": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA20": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA21": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA22": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    },
+    "background": {
+        "houseA1": {
+            "asset": "houseA",
+            "translate": [
+                165.47616835794085,
+                0.0,
+                272.5350137984647
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "houseA2": {
+            "asset": "houseA",
+            "translate": [
+                165.47616835794085,
+                0.0,
+                272.5350137984647
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "backTowerA1": {
+            "asset": "backTowerA",
+            "translate": [
+                517.5038784757387,
+                0.0,
+                526.4634250487801
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "backTowerA2": {
+            "asset": "backTowerA",
+            "translate": [
+                517.5038784757387,
+                0.0,
+                526.4634250487801
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "backTowerA": {
+            "asset": "backTowerA",
+            "translate": [
+                517.5038784757387,
+                0.0,
+                526.4634250487801
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "houseA": {
+            "asset": "houseA",
+            "translate": [
+                165.47616835794085,
+                0.0,
+                272.5350137984647
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    }
+}
