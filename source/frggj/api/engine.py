@@ -54,10 +54,10 @@ class GEngine(object):
                 self._controls = {GControl.kUp: False, GControl.kDown: False, GControl.kLeft: False, 
                                   GControl.kRight: False, GControl.kJump: False, GControl.kRun: False, 
                                   GControl.kAttack: False, GControl.kAction: False}
-                self._controls[GControl.kUp] = pressed_keys[ord('w')]
-                self._controls[GControl.kDown] = pressed_keys[ord('s')]
-                self._controls[GControl.kLeft] = pressed_keys[ord('a')]
-                self._controls[GControl.kRight] = pressed_keys[ord('d')]
+                self._controls[GControl.kUp] = pressed_keys[ord('w')] or pressed_keys[self._pg.K_UP]
+                self._controls[GControl.kDown] = pressed_keys[ord('s')] or pressed_keys[self._pg.K_DOWN]
+                self._controls[GControl.kLeft] = pressed_keys[ord('a')] or pressed_keys[self._pg.K_LEFT]
+                self._controls[GControl.kRight] = pressed_keys[ord('d')] or pressed_keys[self._pg.K_RIGHT]
                 self._controls[GControl.kJump] = pressed_keys[self._pg.K_SPACE]
                 self._controls[GControl.kRun] = pressed_keys[self._pg.K_LSHIFT]
                 self._controls[GControl.kAction] = pressed_keys[self._pg.K_LCTRL]
