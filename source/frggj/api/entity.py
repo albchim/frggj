@@ -9,9 +9,10 @@ from frggj.api.transform import GTransform
 class GEntityType(object):
     kPlayer = 0
     kEnemy = 1
-    kScenery = 2
+    kSet = 2
     kItem = 3
     kPlatform = 4
+    kBackground = 5
 
 
 class GEntity(object):
@@ -23,6 +24,14 @@ class GEntity(object):
         self._velocity = 0
         self._active = True
         self._active_animation = 0
+        self._action_callback = None
+    
+    def set_action_callback(self, callback):
+        self._action_callback = callback
+        
+    def action_callback(self, args=[]):
+        if self._action_callback:
+            self._action_callback(*args)
     
     def update(self, elapsed_time):
         if self._velocity > 0:
@@ -88,38 +97,13 @@ class GCollideableMixin(object):
     def solve_collision(self, player):
         if np.abs(self.get_transform().get_translation()[2] - player.get_transform().get_translation()[2]) < 1.0:
             player._velocity = 0
-            increment = -2 if player._direction[2] > 0 else +2
+            increment = -0.5 if player._direction[2] > 0 else +0.5
             player.get_transform().set_translation([player.get_transform().get_translation()[0], player.get_transform().get_translation()[1], player.get_transform().get_translation()[2] + increment])
             player._state_manager.handle_event({GEvent.kStop: True, 
                                                 player._state_manager.get_current_state().direction: False})
             return True
         else:
             return False
-
-
-class GItem(GEntity):
-    def __init__(self, name, asset=None, transform=None):
-        super().__init__(name, asset, transform)
-        self._actioned = False
-        self._action_callback = None
-    
-    def set_action_callback(self, callback):
-        self._action_callback = callback
-    
-    def get_type(self):
-        return GEntityType.kItem
-
-
-class GItemActionable(GItem, GCollideableMixin):
-    def update(self, elapsed_time, player):
-        if player:
-            if np.abs(self.get_transform().get_translation()[2] - player.get_transform().get_translation()[2]) < 1.0:
-                if player._state_manager.get_current_state().name == GControl.kAttack:
-                    self._actioned = True
-                    if self._action_callback:
-                        self._action_callback()
-                self.solve_collision(player)
-        super().update(elapsed_time)
 
 
 class GPlayer(GEntity):
@@ -192,8 +176,8 @@ class GEnemy(GEntity):
     
     def get_type(self):
         return GEntityType.kEnemy
-    
-    
+
+
 class GEnemyGuard(GEnemy):
     
     def set_max_patrol_distance(self, distance: float, side: str):
@@ -223,3 +207,67 @@ class GEnemyGuard(GEnemy):
                 events[control] = self._state_manager.get_current_state().direction == control
                 
         return events
+
+
+class GPlatform(GEntity):
+    def __init__(self, name, asset=None, transform=None):
+        super().__init__(name, asset, transform)
+        self._state = None
+        self._active_animation = 1
+
+    def update(self, elapsed_time, player):
+        pass
+        
+    def get_type(self):
+        return GEntityType.kPlatform
+
+
+class GSet(GEntity):
+    def __init__(self, name, asset=None, transform=None):
+        super().__init__(name, asset, transform)
+        self._state = None
+        self._active_animation = 1
+
+    def update(self, elapsed_time, player):
+        pass
+        
+    def get_type(self):
+        return GEntityType.kSet
+
+
+class GItem(GEntity):
+    def __init__(self, name, asset=None, transform=None):
+        super().__init__(name, asset, transform)
+        self._state = None
+        self._active_animation = 1
+
+    def update(self, elapsed_time, player):
+        pass
+        
+    def get_type(self):
+        return GEntityType.kItem
+
+
+class GBackground(GEntity):
+    def __init__(self, name, asset=None, transform=None):
+        super().__init__(name, asset, transform)
+        self._state = None
+        self._active_animation = 1
+
+    def update(self, elapsed_time, player):
+        pass
+        
+    def get_type(self):
+        return GEntityType.kBackground
+
+
+class GItemActionable(GItem, GCollideableMixin):
+    def update(self, elapsed_time, player):
+        if player:
+            if np.abs(self.get_transform().get_translation()[2] - player.get_transform().get_translation()[2]) < 1.0:
+                if player._state_manager.get_current_state().name == GControl.kAttack:
+                    self._actioned = True
+                    if self._action_callback:
+                        self._action_callback()
+                self.solve_collision(player)
+        super().update(elapsed_time, player)

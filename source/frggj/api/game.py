@@ -5,6 +5,7 @@ from frggj.api.entity import GPlayer, GEnemyGuard, GItemActionable
 from frggj.api.asset import GAsset
 from frggj.api.transform import GTransform
 from frggj.api.camera import GCamera
+import os
 from frggj.api.constants import GControl
 import numpy as np
 
@@ -48,38 +49,55 @@ class GGame(object):
     def initialize(self, execution_path):
         if self._initialized == False:
             assets_path = "{0}/../../assets".format(execution_path)
-            player_asset = GAsset("player")
-            player_asset.load("{0}/merchant/asset.json".format(assets_path))
+            self._load_assets(assets_path)
+            levels_path = "{0}/../../levels".format(execution_path)
+            self._load_levels(levels_path)
+
+            player_asset = self._assets["merchant"]
             player_spawn = GTransform()
             self._player = GPlayer("player", 5, player_asset, player_spawn)
             self._camera = GCamera()
             self._camera.set_translation([-40.0, 3.0, 4.0])
             self._camera.set_eulers([0.0, 90, 0.0])
             self._camera.set_parent_constraint(player_spawn)
+            self._initialized = True
+    
+    def _load_assets(self, assets_path):
+        assets = os.listdir(assets_path)
+        for asset_name in assets:
+            print(asset_name)
+            new_asset = GAsset(asset_name)
+            new_asset.load("{0}/{1}/asset.json".format(assets_path, asset_name))
+            self._assets[asset_name] = new_asset
+        
+    def _load_levels(self, levels_path):
+        levels = os.listdir(levels_path)
+        self._levels = [None] * len(levels)
+        for level_name in levels:
+            level_index = int(level_name[5:]) - 1
+            new_level = GLevel(level_name)
+            new_level.load(levels_path, self._assets)
+            self._levels[level_index] = new_level
 
-            dummy_level = GLevel()
-            dummy_scene = GScene()
-            
+            # placeholder until there is not enemy information in the scene description
+            player_asset = self._assets["merchant"]
             enemy1_spawn = GTransform()
             enemy1_spawn.set_translation([0.0, 0.0, 0.0])
             enemy1 = GEnemyGuard("enemy1", 5, player_asset, enemy1_spawn)
             enemy1.set_max_patrol_distance(20, GControl.kRight)
             enemy1.set_max_patrol_distance(5, GControl.kLeft)
-            dummy_scene.add_entity(enemy1)
-            
+
             enemy2_spawn = GTransform()
             enemy2_spawn.set_translation([0.0, 0.0, -10.0])
             enemy2 = GEnemyGuard("enemy2", 5, player_asset, enemy2_spawn)
             enemy2.set_max_patrol_distance(5, GControl.kRight)
             enemy2.set_max_patrol_distance(-20, GControl.kLeft)
-            dummy_scene.add_entity(enemy2)
             
             end_item_spawn = GTransform()
             end_item_spawn.set_translation([0.0, 0.0, 100.0])
             end_item = GItemActionable("end_item", player_asset, end_item_spawn)
             end_item.set_action_callback(self._end_callback)
-            dummy_scene.add_entity(end_item)
 
-            dummy_level.add_scene(dummy_scene)
-            self.add_level(dummy_level)
-            self._initialized = True
+            self._levels[0]._scenes[0].add_entity(enemy1)
+            self._levels[0]._scenes[0].add_entity(enemy2)
+            self._levels[0]._scenes[0].add_entity(end_item)

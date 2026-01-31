@@ -1,4 +1,5 @@
 import json
+import os
 import numpy as np
 import pygame as pg
 from frggj.api.utils import invert_matrices_array
@@ -53,3 +54,9 @@ def import_takes(filepath):
         data = json.load(json_data)
         json_data.close()
         return data
+
+
+def import_level(filepath):
+    levels = os.listdir(filepath)
+    for level in levels:
+        a = 0
