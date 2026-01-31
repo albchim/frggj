@@ -2,6 +2,7 @@
 from frggj.api.level import GLevel
 from frggj.api.scene import GScene
 from frggj.api.entity import GPlayer
+from frggj.api.entity import GEnemy
 from frggj.api.asset import GAsset
 from frggj.api.transform import GTransform
 from frggj.api.camera import GCamera
@@ -19,6 +20,7 @@ class GGame(object):
     def update(self, elapsed_time, controls):
         if self._player:
             self._player.update(elapsed_time, controls)
+        self._levels[self._current_level].update(elapsed_time)
     
     def add_level(self, level : GLevel) -> None:
         if self._levels is None:
@@ -50,11 +52,16 @@ class GGame(object):
             player_spawn = GTransform()
             self._player = GPlayer("player", 5, player_asset, player_spawn)
             self._camera = GCamera()
-            self._camera.set_translation([-20.0, 3.0, 0.0])
+            self._camera.set_translation([-30.0, 3.0, 0.0])
             self._camera.set_eulers([0.0, 90, 0.0])
 
             dummy_level = GLevel()
             dummy_scene = GScene()
+            enemy1_spawn = GTransform()
+            enemy1_spawn.set_translation([0.0, 0.0, 0.0])
+            enemy1 = GEnemy("enemy1", 5, player_asset, enemy1_spawn)
+            dummy_scene.add_entity(enemy1)
+
             dummy_level.add_scene(dummy_scene)
             self.add_level(dummy_level)
             self._initialized = True

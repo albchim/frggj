@@ -14,10 +14,10 @@ class GScene(object):
             "platforms": {}
         }
     
-    def update(self):
+    def update(self, elapsed_time):
         for entity_type in self._content.keys():
             for entity_name in self._content[entity_type]:
-                self._content[entity_type][entity_name].update()
+                self._content[entity_type][entity_name].update(elapsed_time)
 
     def add_entity(self, entity) -> None:
         if entity.get_type() == GEntityType.kEnemy:
@@ -33,7 +33,7 @@ class GScene(object):
         return self._content[entity_type][entity_name]
     
     def get_enemies(self):
-        return self._content["enemies"].values()
+        return list(self._content["enemies"].values())
     
     def get_sceneries(self):
         return self._content["sceneries"].values()
@@ -54,7 +54,7 @@ class GScene(object):
         # triangle_indices = np.asarray(range(len(self._assets[1].get_mesh().get_triangles())))
         player_transform.set_translation(player_translation)
 
-        rendereables = [player]
+        rendereables = [player] + self.get_enemies()
 
         for entity in rendereables:
             asset = entity.get_asset()
@@ -65,7 +65,7 @@ class GScene(object):
             else:
                 asset_bindpose = None
                 asset_influences = None
-            asset_animation = asset.get_active_animation()
+            asset_animation = asset.get_animation(entity.get_active_animation())
             if asset_animation:
                 frame = int(0.024 * time)%asset_animation.get_length()
                 animation_frame = asset_animation.get_frame(frame)

@@ -19,6 +19,7 @@ class GEntity(object):
         self._direction = np.asarray([0, 0, 1])
         self._velocity = 0
         self._active = True
+        self._active_animation = 0
     
     def update(self, elapsed_time):
         if self._velocity > 0:
@@ -26,6 +27,10 @@ class GEntity(object):
             translation += self._direction * self._velocity * elapsed_time
             self._transform.set_translation(translation)
             self._velocity = max(self._velocity - elapsed_time * 20.0, 0)
+            if self._direction[2] > 0:
+                self._transform.set_eulers([0.0, 0.0, 0.0])
+            if self._direction[2] < 0:
+                self._transform.set_eulers([0.0, 180.0, 0.0])
     
     def set_name(self, name):
         self._name = name
@@ -53,6 +58,12 @@ class GEntity(object):
     
     def get_asset(self):
         return self._asset
+    
+    def get_active_animation(self):
+        return self._active_animation
+    
+    def set_active_animation(self, anim_label):
+        self._active_animation = self._asset._anim_map.get(anim_label, 0)
 
 
 class GPlayer(GEntity):
@@ -64,9 +75,8 @@ class GPlayer(GEntity):
         self._state = None
     
     def update(self, elapsed_time, controls):
-        super().update(elapsed_time)
         self._state_manager.handle_event(controls)
-        self._asset.set_active_animation(self._state_manager.get_animation_name())
+        self.set_active_animation(self._state_manager.get_animation_name())
         self._velocity = 0
         if self._state_manager.get_current_state().direction == "right":
             self._direction = np.asarray([0, 0, 1])
@@ -76,3 +86,27 @@ class GPlayer(GEntity):
             self._velocity = 1.5
         elif self._state_manager.get_current_state().name == "run":
             self._velocity = 3
+        super().update(elapsed_time)
+    
+    def get_type(self):
+        return GEntityType.kPlayer
+
+
+class GEnemy(GEntity):
+    def __init__(self, name, health, asset=None, transform=None):
+        super().__init__(name, asset, transform)
+        self._health = health
+        self._state = None
+        self._velocity = 0.0
+        self._active_animation = 1
+    
+    def update(self, elapsed_time):
+        self._velocity = 10.0
+        if self._direction[2] == 1 and self.get_transform().get_translation()[2] > 20:
+            self._direction[2] = -1
+        if self._direction[2] == -1 and self.get_transform().get_translation()[2] < 5:
+            self._direction[2] = 1
+        super().update(elapsed_time)
+    
+    def get_type(self):
+        return GEntityType.kEnemy

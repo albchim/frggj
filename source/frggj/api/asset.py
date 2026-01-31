@@ -48,11 +48,8 @@ class GAsset(object):
     def get_takes(self):
         return self._takes
 
-    def get_active_animation(self):
+    def get_animation(self, index):
         if self._takes:
-            return self._takes.get_active_animation()
+            return self._takes.get_animation(index)
         else:
             return None
-
-    def set_active_animation(self, anim_label):
-        self._takes.set_active(self._anim_map.get(anim_label, 0))
