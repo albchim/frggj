@@ -67,6 +67,8 @@ class GEngine(object):
                 self._run_menu()
             elif self._state == GEngineState.kGame:
                 self._run_game()
+            elif self._state == GEngineState.kEnd:
+                running = False
 
             surf = pg.surfarray.make_surface(self._canvas.get_pixels())
             surf = self._pg.transform.scale(surf, (self._width * self._scale_factor, self._height * self._scale_factor))

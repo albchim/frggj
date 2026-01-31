@@ -3,6 +3,7 @@ from copy import deepcopy
 import numpy as np
 from frggj.api.state_manager import BASE_STATES, GStateManager
 from frggj.api.constants import GControl, GEvent
+from frggj.api.transform import GTransform
 
 
 class GEntityType(object):
@@ -77,6 +78,50 @@ class GEntity(object):
         return states
 
 
+class GCollideableMixin(object):
+    
+    _collideable = True
+    
+    def is_collideable(self):
+        return self._collideable
+    
+    def solve_collision(self, player):
+        if np.abs(self.get_transform().get_translation()[2] - player.get_transform().get_translation()[2]) < 1.0:
+            player._velocity = 0
+            increment = -2 if player._direction[2] > 0 else +2
+            player.get_transform().set_translation([player.get_transform().get_translation()[0], player.get_transform().get_translation()[1], player.get_transform().get_translation()[2] + increment])
+            player._state_manager.handle_event({GEvent.kStop: True, 
+                                                player._state_manager.get_current_state().direction: False})
+            return True
+        else:
+            return False
+
+
+class GItem(GEntity):
+    def __init__(self, name, asset=None, transform=None):
+        super().__init__(name, asset, transform)
+        self._actioned = False
+        self._action_callback = None
+    
+    def set_action_callback(self, callback):
+        self._action_callback = callback
+    
+    def get_type(self):
+        return GEntityType.kItem
+
+
+class GItemActionable(GItem, GCollideableMixin):
+    def update(self, elapsed_time, player):
+        if player:
+            if np.abs(self.get_transform().get_translation()[2] - player.get_transform().get_translation()[2]) < 1.0:
+                if player._state_manager.get_current_state().name == GControl.kAttack:
+                    self._actioned = True
+                    if self._action_callback:
+                        self._action_callback()
+                self.solve_collision(player)
+        super().update(elapsed_time)
+
+
 class GPlayer(GEntity):
     def __init__(self, name, health, asset=None, transform=None):
         super().__init__(name, asset, transform)
@@ -86,7 +131,6 @@ class GPlayer(GEntity):
         self._in_air_counter = 1000
     
     def update(self, elapsed_time, controls):
-        
         if self._in_air_counter < 100:
             self._in_air_counter += 1
             controls[GEvent.kOnGround] = False
