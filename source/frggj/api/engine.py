@@ -61,6 +61,7 @@ class GEngine(object):
                 self._controls[GControl.kJump] = pressed_keys[self._pg.K_SPACE]
                 self._controls[GControl.kRun] = pressed_keys[self._pg.K_LSHIFT]
                 self._controls[GControl.kAction] = pressed_keys[self._pg.K_LCTRL]
+                self._controls[GControl.kAttack] = pressed_keys[self._pg.K_x]
                     
             if self._state == GEngineState.kMenu:
                 self._run_menu()

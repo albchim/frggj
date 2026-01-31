@@ -67,24 +67,24 @@ class GEntity(object):
     
     def set_active_animation(self, anim_label):
         self._active_animation = self._asset._anim_map.get(anim_label, 0)
+        
+    def _init_state_manager(self, states: dict, init_state: str):
+        self._state_manager = GStateManager(states, init_state)
+        self._state_manager.start()
+        
+    def _init_anim_state_frames(self, states: dict):
+        for key in states:
+            states[key].set_animation_frames(self.get_asset().get_takes().get_animation(self.get_asset()._anim_map.get(states[key].name, 0)).get_length())
+        return states
 
 
 class GPlayer(GEntity):
     def __init__(self, name, health, asset=None, transform=None):
         super().__init__(name, asset, transform)
-        self._init_state_manager(self._init_anim_state_frames(deepcopy(BASE_STATES)))
+        self._init_state_manager(self._init_anim_state_frames(deepcopy(BASE_STATES)), "idle_right")
         self._health = health
         self._state = None
         self._in_air_counter = 1000
-    
-    def _init_state_manager(self, states):
-        self._state_manager = GStateManager(states, "idle_right")
-        self._state_manager.start()
-        
-    def _init_anim_state_frames(self, states):
-        for key in states:
-            states[key].set_animation_frames(self.get_asset().get_takes().get_animation(self.get_asset()._anim_map.get(states[key].name, 0)).get_length())
-        return states
     
     def update(self, elapsed_time, controls):
         
@@ -99,9 +99,9 @@ class GPlayer(GEntity):
         self._state_manager.handle_event(controls)
         self.set_active_animation(self._state_manager.get_animation_name())
         if self._state_manager.get_current_state().direction == "right":
-            self._direction = np.asarray([0, 0, 1])
+            self._direction[2] = 1
         elif self._state_manager.get_current_state().direction == "left":
-            self._direction = np.asarray([0, 0, -1])
+            self._direction[2] = -1
         if self._state_manager.get_current_state().moving:
             if self._state_manager.get_current_state().name in ["walk", "jump"]:
                 self._velocity = 10
@@ -116,21 +116,70 @@ class GPlayer(GEntity):
 class GEnemy(GEntity):
     def __init__(self, name, health, asset=None, transform=None):
         super().__init__(name, asset, transform)
+        self._init_state_manager(self._init_anim_state_frames(deepcopy(BASE_STATES)), "idle_left")
         self._health = health
         self._state = None
         self._velocity = 0.0
         self._active_animation = 1
+        self._max_patrol_distance = {GControl.kRight: 10.0, GControl.kLeft: 10.0}
+        
+    def brain(self, player = None) -> dict:
+        return {}
     
-    def update(self, elapsed_time):
-        self._velocity = 10.0
-        if self._direction[2] == 1 and self.get_transform().get_translation()[2] > 20:
-            self._direction[2] = -1
-        if self._direction[2] == -1 and self.get_transform().get_translation()[2] < 5:
+    def update(self, elapsed_time, player):
+        self._state_manager.handle_event(self.brain(player))
+        self.set_active_animation(self._state_manager.get_animation_name())
+        if self._state_manager.get_current_state().direction == "right":
             self._direction[2] = 1
+        elif self._state_manager.get_current_state().direction == "left":
+            self._direction[2] = -1
+        # With inertia
+        # if self._state_manager.get_current_state().moving:
+        #     if self._state_manager.get_current_state().name in ["walk", "jump"]:
+        #         self._velocity = 10
+        #     elif self._state_manager.get_current_state().name == "run":
+        #         self._velocity = 15
+        # Without inertia
+        self._velocity = 0
+        if self._state_manager.get_current_state().name in ["walk", "jump"]:
+            self._velocity = 10
+        elif self._state_manager.get_current_state().name == "run":
+            self._velocity = 15
         super().update(elapsed_time)
     
     def get_type(self):
         return GEntityType.kEnemy
+
+
+class GEnemyGuard(GEnemy):
+    
+    def set_max_patrol_distance(self, distance: float, side: str):
+        if side not in [GControl.kRight, GControl.kLeft]:
+            raise ValueError("Invalid max patrol distance side provided.")
+        self._max_patrol_distance[side] = distance
+    
+    def brain(self, player):
+        events = {}
+        
+        if not player:
+            return events
+        
+        if np.abs(self.get_transform().get_translation()[2] - player.get_transform().get_translation()[2]) < 3.0:
+            for control in [GControl.kRight, GControl.kLeft]:
+                events[control] = False
+            events[GControl.kAttack] = True
+            return events
+        
+        # Patrol cycle
+        if (self._direction[2] == 1 and self.get_transform().get_translation()[2] > self._max_patrol_distance[GControl.kRight]) or \
+            (self._direction[2] == -1 and self.get_transform().get_translation()[2] < self._max_patrol_distance[GControl.kLeft]):
+            for control in [GControl.kRight, GControl.kLeft]:
+                events[control] = not (self._state_manager.get_current_state().direction == control)
+        else:
+            for control in [GControl.kRight, GControl.kLeft]:
+                events[control] = self._state_manager.get_current_state().direction == control
+                
+        return events
 
 
 class GPlatform(GEntity):
@@ -138,6 +187,9 @@ class GPlatform(GEntity):
         super().__init__(name, asset, transform)
         self._state = None
         self._active_animation = 1
+
+    def update(self, elapsed_time, player):
+        pass
         
     def get_type(self):
         return GEntityType.kPlatform
@@ -148,6 +200,9 @@ class GSet(GEntity):
         super().__init__(name, asset, transform)
         self._state = None
         self._active_animation = 1
+
+    def update(self, elapsed_time, player):
+        pass
         
     def get_type(self):
         return GEntityType.kSet
@@ -158,6 +213,9 @@ class GItem(GEntity):
         super().__init__(name, asset, transform)
         self._state = None
         self._active_animation = 1
+
+    def update(self, elapsed_time, player):
+        pass
         
     def get_type(self):
         return GEntityType.kItem
@@ -168,6 +226,9 @@ class GBackground(GEntity):
         super().__init__(name, asset, transform)
         self._state = None
         self._active_animation = 1
+
+    def update(self, elapsed_time, player):
+        pass
         
     def get_type(self):
         return GEntityType.kBackground
