@@ -680,5 +680,37 @@
                 0.0
             ]
         }
+    },
+    "enemies": {
+        "enemy1": {
+            "asset": "merchant",
+            "translate": [
+                0.0,
+                0.0,
+                5.316773312528017
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "min_patrol": -5.0,
+            "max_patrol": 15.0
+        },
+        "enemy2": {
+            "asset": "merchant",
+            "translate": [
+                0.0,
+                0.0,
+                5.316773312528017
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "min_patrol": 25.0,
+            "max_patrol": 40.0
+        }
     }
 }

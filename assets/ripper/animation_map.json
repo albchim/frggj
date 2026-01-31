@@ -1,0 +1,8 @@
+{
+    "idle": 0,
+    "walk": 1,
+    "jump": 2,
+    "attack": 3,
+    "turn": 4,
+    "run": 5
+}
