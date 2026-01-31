@@ -116,5 +116,10 @@ class GTransform(object):
         self._constraint_offset = GTransform()
         self._constraint_offset.set_matrix(invert_matrix(transform.get_matrix()) @ self.get_matrix())
 
-    def get_matrix_constrained(self):
+    def get_matrix_parent_constrained(self):
         return self._constraint.get_matrix() @ self._constraint_offset.get_matrix()
+    
+    def get_matrix_constrained(self):
+        point_constraint = GTransform()
+        point_constraint.set_translation(self._constraint.get_translation())
+        return point_constraint.get_matrix() @ self._constraint_offset.get_matrix()

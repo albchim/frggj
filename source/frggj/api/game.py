@@ -53,8 +53,9 @@ class GGame(object):
             player_spawn = GTransform()
             self._player = GPlayer("player", 5, player_asset, player_spawn)
             self._camera = GCamera()
-            self._camera.set_translation([-30.0, 3.0, 0.0])
+            self._camera.set_translation([-40.0, 3.0, 4.0])
             self._camera.set_eulers([0.0, 90, 0.0])
+            self._camera.set_parent_constraint(player_spawn)
 
             dummy_level = GLevel()
             dummy_scene = GScene()
