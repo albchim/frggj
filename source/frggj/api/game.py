@@ -2,10 +2,11 @@
 from frggj.api.level import GLevel
 from frggj.api.scene import GScene
 from frggj.api.entity import GPlayer
-from frggj.api.entity import GEnemy
+from frggj.api.entity import GEnemy, GEnemyGuard
 from frggj.api.asset import GAsset
 from frggj.api.transform import GTransform
 from frggj.api.camera import GCamera
+from frggj.api.constants import GControl
 import numpy as np
 
 class GGame(object):
@@ -57,10 +58,20 @@ class GGame(object):
 
             dummy_level = GLevel()
             dummy_scene = GScene()
+            
             enemy1_spawn = GTransform()
             enemy1_spawn.set_translation([0.0, 0.0, 0.0])
-            enemy1 = GEnemy("enemy1", 5, player_asset, enemy1_spawn)
+            enemy1 = GEnemyGuard("enemy1", 5, player_asset, enemy1_spawn)
+            enemy1.set_max_patrol_distance(20, GControl.kRight)
+            enemy1.set_max_patrol_distance(5, GControl.kLeft)
             dummy_scene.add_entity(enemy1)
+            
+            enemy2_spawn = GTransform()
+            enemy2_spawn.set_translation([0.0, 0.0, -10.0])
+            enemy2 = GEnemyGuard("enemy2", 5, player_asset, enemy2_spawn)
+            enemy2.set_max_patrol_distance(5, GControl.kRight)
+            enemy2.set_max_patrol_distance(-20, GControl.kLeft)
+            dummy_scene.add_entity(enemy2)
 
             dummy_level.add_scene(dummy_scene)
             self.add_level(dummy_level)

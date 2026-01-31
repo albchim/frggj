@@ -7,18 +7,16 @@ from frggj.api.constants import GEvent, GControl
 class GState(object):
     
     name = None
-    current_frame = 0
-    orig_direction = None
-    direction = None
     animation_name = None
-    moving = False
     
     def __init__(self, direction, animation_frames: int = 0):
         if direction not in ["left", "right"]:
             raise ValueError("Wrong initialization for direction")
         self.direction = direction
+        self.current_frame = 0.0
         self.orig_direction = direction
         self.animation_frames = animation_frames
+        self.moving = False
     
     def on_enter(self, previous_state: Optional[str]) -> None:
         self.current_frame = 0.0
@@ -47,8 +45,7 @@ class GState(object):
         self.current_frame += 1
         return False
         
-        
-    
+
 class IdleState(GState):
     
     name = "idle"
@@ -150,14 +147,6 @@ class JumpState(GState):
         if self.tick():
             if event.get(GControl.kAttack):
                 return "attack_{0}".format(self.direction)
-            # if not event.get(GEvent.kOnGround):
-            #     if event.get(GControl.kRight):
-            #         if self.direction == "left":
-            #             return "jump_right"
-            #     elif event.get(GControl.kLeft):
-            #         if self.direction == "right":
-            #             return "jump_left"
-            # else:
             if event.get(GEvent.kOnGround):
                 if event.get(GControl.kRight):
                     if self.direction == "left":
