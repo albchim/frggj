@@ -147,9 +147,9 @@ class GPlayer(GEntity):
             self._direction[2] = -1
         if self._state_manager.get_current_state().moving:
             if self._state_manager.get_current_state().name in ["walk", "jump"]:
-                self._velocity = 10
+                self._velocity = 30
             elif self._state_manager.get_current_state().name == "run":
-                self._velocity = 15
+                self._velocity = 50
         super().update(elapsed_time)
     
     def get_type(self):
