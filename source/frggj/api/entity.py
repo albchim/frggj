@@ -22,9 +22,9 @@ class GEntity(object):
     def update(self, elapsed_time):
         if self._velocity > 0:
             translation = self._transform.get_translation()
-            translation += self._direction * self._velocity * elapsed_time * 0.0001
+            translation += self._direction * self._velocity * elapsed_time
             self._transform.set_translation(translation)
-            self._velocity = max(self._velocity - elapsed_time, 0)
+            self._velocity = max(self._velocity - elapsed_time * 20.0, 0)
     
     def set_name(self, name):
         self._name = name
@@ -64,12 +64,12 @@ class GPlayer(GEntity):
         super().update(elapsed_time)
         if controls["right"]:
             self._direction = np.asarray([0, 0, 1])
-            self._velocity = 1
+            self._velocity = 10.0
             self._asset.set_active_animation(1)
         if controls["left"]:
             self._direction = np.asarray([0, 0, -1])
-            self._velocity = 1
+            self._velocity = 10.0
             self._asset.set_active_animation(1)
-        if True not in controls.values():
+        if True not in controls.values() and self._velocity == 0.0:
             self._asset.set_active_animation(0)
 
