@@ -1,9 +1,10 @@
 # scene
 import json
-from frggj.api.entity import GEntityType, GPlatform, GSet, GBackground, GItem
+from frggj.api.entity import GEntityType, GPlatform, GSet, GBackground, GItem, GEnemyGuard
 import numpy as np
 from frggj.api.utils import invert_matrix
 from frggj.api.transform import GTransform
+from frggj.api.constants import GControl
 from numba import njit, jit
 
 
@@ -14,8 +15,7 @@ class GScene(object):
             "set": {},
             "items": {},
             "platforms": {},
-            "background": {}
-        }
+            "background": {}}
     
     def update(self, elapsed_time, player):
         for entity_type in self._content.keys():
@@ -38,14 +38,19 @@ class GScene(object):
                     new_entity = None
                     if entity_type == "platforms":
                         new_entity = GPlatform(entity_name, entity_asset, entity_transform)
-                    if entity_type == "set":
+                    elif entity_type == "set":
                         new_entity = GSet(entity_name, entity_asset, entity_transform)
-                    if entity_type == "item":
+                    elif entity_type == "item":
                         new_entity = GItem(entity_name, entity_asset, entity_transform)
-                    if entity_type == "background":
+                    elif entity_type == "background":
                         new_entity = GBackground(entity_name, entity_asset, entity_transform)
+                    elif entity_type == "enemies":
+                        new_entity = GEnemyGuard(entity_name, 5, entity_asset, entity_transform)
+                        min_patrol = content_data[entity_type][entity_name]["min_patrol"]
+                        new_entity.set_max_patrol_distance(min_patrol, GControl.kLeft)
+                        max_patrol = content_data[entity_type][entity_name]["max_patrol"]
+                        new_entity.set_max_patrol_distance(max_patrol, GControl.kRight)
                     self.add_entity(new_entity)
-
 
     def add_entity(self, entity) -> None:
         if entity.get_type() == GEntityType.kEnemy:

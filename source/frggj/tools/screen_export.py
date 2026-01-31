@@ -202,9 +202,10 @@ scene_export_folder = "C:/dev/gitrepos/frggj/levels/level1/screen1"
 set_group = cmds.ls("|set")
 platforms_group = cmds.ls("|platforms")
 background_group = cmds.ls("|background")
+enemies_group = cmds.ls("|enemies")
 
 exported_assets = []
-scene_layout = {"set": {}, "platforms": {}, "background": {}}
+scene_layout = {"set": {}, "platforms": {}, "background": {}, "enemies": {}}
 if set_group:
     assets = cmds.listRelatives(set_group)
     for asset_transform in assets:
@@ -253,6 +254,22 @@ if background_group:
                 "translate": instance_translation,
                 "rotation": instance_rotation}
             scene_layout["background"][asset_transform] = instance_data
+if enemies_group:
+    enemies = cmds.listRelatives(enemies_group)
+    for enemy in enemies:
+        enemy_asset = cmds.getAttr("{0}.asset".format(enemy))
+        enemy_min_patrol = cmds.getAttr("{0}.min_patrol".format(enemy))
+        enemy_max_patrol = cmds.getAttr("{0}.max_patrol".format(enemy))
+        
+        enemy_translation = cmds.xform(enemy, query=True, translation=True, worldSpace=True)
+        enemy_rotation = cmds.xform(enemy, query=True, rotation=True, worldSpace=True)
+        enemy_data = {
+            "asset": enemy_asset,
+            "translate": enemy_translation,
+            "rotation": enemy_rotation,
+            "min_patrol": enemy_min_patrol,
+            "max_patrol": enemy_max_patrol}
+        scene_layout["enemies"][enemy] = enemy_data
 
 export_filepath = os.path.join(scene_export_folder, "description.json")
 with open(export_filepath, 'w', encoding='utf-8') as f:
