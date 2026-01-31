@@ -1,8 +1,7 @@
 # game
 from frggj.api.level import GLevel
 from frggj.api.scene import GScene
-from frggj.api.entity import GPlayer
-from frggj.api.entity import GEnemy, GEnemyGuard
+from frggj.api.entity import GPlayer, GEnemyGuard, GItemActionable
 from frggj.api.asset import GAsset
 from frggj.api.transform import GTransform
 from frggj.api.camera import GCamera
@@ -11,13 +10,14 @@ from frggj.api.constants import GControl
 import numpy as np
 
 class GGame(object):
-    def __init__(self):
+    def __init__(self, end_callback = None):
         self._current_level = 0
         self._levels = None
         self._player = None
         self._initialized = False
         self._assets = {}
         self._camera = None
+        self._end_callback = end_callback
 
     def update(self, elapsed_time, controls):
         if self._player:
@@ -91,6 +91,11 @@ class GGame(object):
             enemy2 = GEnemyGuard("enemy2", 5, player_asset, enemy2_spawn)
             enemy2.set_max_patrol_distance(5, GControl.kRight)
             enemy2.set_max_patrol_distance(-20, GControl.kLeft)
+            
+            end_item_spawn = GTransform()
+            end_item_spawn.set_translation([0.0, 0.0, 100.0])
+            end_item = GItemActionable("end_item", player_asset, end_item_spawn)
+            end_item.set_action_callback(self._end_callback)
 
             self._levels[0]._scenes[0].add_entity(enemy1)
             self._levels[0]._scenes[0].add_entity(enemy2)"""
