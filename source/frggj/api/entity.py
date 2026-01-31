@@ -1,5 +1,8 @@
 # entity
+from copy import deepcopy
 import numpy as np
+from frggj.api.state_manager import BASE_STATES, GStateManager
+from frggj.api.constants import GControl, GEvent
 
 
 class GEntityType(object):
@@ -61,27 +64,48 @@ class GEntity(object):
     def get_active_animation(self):
         return self._active_animation
     
-    def set_active_animation(self, index):
-        self._active_animation = index
+    def set_active_animation(self, anim_label):
+        self._active_animation = self._asset._anim_map.get(anim_label, 0)
 
 
 class GPlayer(GEntity):
     def __init__(self, name, health, asset=None, transform=None):
         super().__init__(name, asset, transform)
+        self._init_state_manager(self._init_anim_state_frames(deepcopy(BASE_STATES)))
         self._health = health
         self._state = None
+        self._in_air_counter = 1000
+    
+    def _init_state_manager(self, states):
+        self._state_manager = GStateManager(states, "idle_right")
+        self._state_manager.start()
+        
+    def _init_anim_state_frames(self, states):
+        for key in states:
+            states[key].set_animation_frames(self.get_asset().get_takes().get_animation(self.get_asset()._anim_map.get(states[key].name, 0)).get_length())
+        return states
     
     def update(self, elapsed_time, controls):
-        if controls["right"]:
+        
+        if self._in_air_counter < 100:
+            self._in_air_counter += 1
+            controls[GEvent.kOnGround] = False
+        else:   
+            controls[GEvent.kOnGround] = True
+        controls[GEvent.kStop] = self._velocity < 1.0
+        if controls[GControl.kJump]:
+            self._in_air_counter = 0
+        self._state_manager.handle_event(controls)
+        self.set_active_animation(self._state_manager.get_animation_name())
+        if self._state_manager.get_current_state().direction == "right":
             self._direction = np.asarray([0, 0, 1])
-            self._velocity = 10.0
-            self._active_animation = 1
-        if controls["left"]:
+        elif self._state_manager.get_current_state().direction == "left":
             self._direction = np.asarray([0, 0, -1])
-            self._velocity = 10.0
-            self._active_animation = 1
-        if True not in controls.values() and self._velocity == 0.0:
-            self._active_animation = 0
+        if self._state_manager.get_current_state().moving:
+            if self._state_manager.get_current_state().name in ["walk", "jump"]:
+                self._velocity = 10
+            elif self._state_manager.get_current_state().name == "run":
+                self._velocity = 15
         super().update(elapsed_time)
     
     def get_type(self):
