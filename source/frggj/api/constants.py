@@ -4,6 +4,7 @@ class GEvent(object):
     kHit = "hit"
     kDeath = 3
     kOnGround = "ground"
+    kStop = "stop"
 
 class GControl(object):
     kUp = "up"

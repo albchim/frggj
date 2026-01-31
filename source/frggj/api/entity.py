@@ -1,6 +1,8 @@
 # entity
+from copy import deepcopy
 import numpy as np
 from frggj.api.state_manager import BASE_STATES, GStateManager
+from frggj.api.constants import GControl, GEvent
 
 
 class GEntityType(object):
@@ -69,12 +71,13 @@ class GEntity(object):
 class GPlayer(GEntity):
     def __init__(self, name, health, asset=None, transform=None):
         super().__init__(name, asset, transform)
-        self._init_state_manager(self._init_anim_state_frames(BASE_STATES))
+        self._init_state_manager(self._init_anim_state_frames(deepcopy(BASE_STATES)))
         self._health = health
         self._state = None
+        self._in_air_counter = 1000
     
     def _init_state_manager(self, states):
-        self._state_manager = GStateManager(BASE_STATES, "idle_right")
+        self._state_manager = GStateManager(states, "idle_right")
         self._state_manager.start()
         
     def _init_anim_state_frames(self, states):
@@ -83,17 +86,26 @@ class GPlayer(GEntity):
         return states
     
     def update(self, elapsed_time, controls):
+        
+        if self._in_air_counter < 100:
+            self._in_air_counter += 1
+            controls[GEvent.kOnGround] = False
+        else:   
+            controls[GEvent.kOnGround] = True
+        controls[GEvent.kStop] = self._velocity < 1.0
+        if controls[GControl.kJump]:
+            self._in_air_counter = 0
         self._state_manager.handle_event(controls)
         self.set_active_animation(self._state_manager.get_animation_name())
-        self._velocity = 0
         if self._state_manager.get_current_state().direction == "right":
             self._direction = np.asarray([0, 0, 1])
         elif self._state_manager.get_current_state().direction == "left":
             self._direction = np.asarray([0, 0, -1])
-        if self._state_manager.get_current_state().name == "walk":
-            self._velocity = 10
-        elif self._state_manager.get_current_state().name == "run":
-            self._velocity = 15
+        if self._state_manager.get_current_state().moving:
+            if self._state_manager.get_current_state().name in ["walk", "jump"]:
+                self._velocity = 10
+            elif self._state_manager.get_current_state().name == "run":
+                self._velocity = 15
         super().update(elapsed_time)
     
     def get_type(self):
