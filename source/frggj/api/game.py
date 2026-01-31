@@ -21,7 +21,7 @@ class GGame(object):
     def update(self, elapsed_time, controls):
         if self._player:
             self._player.update(elapsed_time, controls)
-        self._levels[self._current_level].update(elapsed_time)
+        self._levels[self._current_level].update(elapsed_time, self._player)
     
     def add_level(self, level : GLevel) -> None:
         if self._levels is None:

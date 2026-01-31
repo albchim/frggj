@@ -14,10 +14,10 @@ class GScene(object):
             "platforms": {}
         }
     
-    def update(self, elapsed_time):
+    def update(self, elapsed_time, player):
         for entity_type in self._content.keys():
             for entity_name in self._content[entity_type]:
-                self._content[entity_type][entity_name].update(elapsed_time)
+                self._content[entity_type][entity_name].update(elapsed_time, player)
 
     def add_entity(self, entity) -> None:
         if entity.get_type() == GEntityType.kEnemy:
@@ -46,7 +46,10 @@ class GScene(object):
 
     def render(self, canvas, player, camera, time):
         player_transform = player.get_transform()
-        camera_matrix = invert_matrix(camera.get_matrix())
+        try:
+            camera_matrix = invert_matrix(camera.get_matrix_constrained())
+        except:
+            camera_matrix = invert_matrix(camera.get_matrix())
 
         # set the player on the ground
         player_translation = player_transform.get_translation()

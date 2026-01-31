@@ -7,8 +7,8 @@ class GLevel(object):
         self._scenes = None
         self._current_scene = 0
     
-    def update(self, elapsed_time):
-        self._scenes[self._current_scene].update(elapsed_time)
+    def update(self, elapsed_time, player):
+        self._scenes[self._current_scene].update(elapsed_time, player)
 
     def add_scene(self, scene : GScene) -> None:
         if self._scenes is None:

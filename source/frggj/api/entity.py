@@ -122,21 +122,28 @@ class GEnemy(GEntity):
         self._active_animation = 1
         self._max_patrol_distance = {GControl.kRight: 10.0, GControl.kLeft: 10.0}
         
-    def brain(self) -> dict:
+    def brain(self, player = None) -> dict:
         return {}
     
-    def update(self, elapsed_time):
-        self._state_manager.handle_event(self.brain())
+    def update(self, elapsed_time, player):
+        self._state_manager.handle_event(self.brain(player))
         self.set_active_animation(self._state_manager.get_animation_name())
         if self._state_manager.get_current_state().direction == "right":
             self._direction[2] = 1
         elif self._state_manager.get_current_state().direction == "left":
             self._direction[2] = -1
-        if self._state_manager.get_current_state().moving:
-            if self._state_manager.get_current_state().name in ["walk", "jump"]:
-                self._velocity = 10
-            elif self._state_manager.get_current_state().name == "run":
-                self._velocity = 15
+        # With inertia
+        # if self._state_manager.get_current_state().moving:
+        #     if self._state_manager.get_current_state().name in ["walk", "jump"]:
+        #         self._velocity = 10
+        #     elif self._state_manager.get_current_state().name == "run":
+        #         self._velocity = 15
+        # Without inertia
+        self._velocity = 0
+        if self._state_manager.get_current_state().name in ["walk", "jump"]:
+            self._velocity = 10
+        elif self._state_manager.get_current_state().name == "run":
+            self._velocity = 15
         super().update(elapsed_time)
     
     def get_type(self):
@@ -150,14 +157,25 @@ class GEnemyGuard(GEnemy):
             raise ValueError("Invalid max patrol distance side provided.")
         self._max_patrol_distance[side] = distance
     
-    def brain(self):
-        command = {}
+    def brain(self, player):
+        events = {}
+        
+        if not player:
+            return events
+        
+        if np.abs(self.get_transform().get_translation()[2] - player.get_transform().get_translation()[2]) < 3.0:
+            for control in [GControl.kRight, GControl.kLeft]:
+                events[control] = False
+            events[GControl.kAttack] = True
+            return events
+        
+        # Patrol cycle
         if (self._direction[2] == 1 and self.get_transform().get_translation()[2] > self._max_patrol_distance[GControl.kRight]) or \
             (self._direction[2] == -1 and self.get_transform().get_translation()[2] < self._max_patrol_distance[GControl.kLeft]):
             for control in [GControl.kRight, GControl.kLeft]:
-                command[control] = not (self._state_manager.get_current_state().direction == control)
+                events[control] = not (self._state_manager.get_current_state().direction == control)
         else:
             for control in [GControl.kRight, GControl.kLeft]:
-                command[control] = self._state_manager.get_current_state().direction == control
+                events[control] = self._state_manager.get_current_state().direction == control
                 
-        return command
+        return events

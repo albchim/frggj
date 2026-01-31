@@ -170,17 +170,23 @@ class AttackState(GState):
     animation_name = "attack"
             
     def handle_event(self, event: int) -> str:
+        if self.tick():
+            if event.get(GControl.kRight):
+                if self.direction == "left":
+                    return "turn_right"
+                return "run_right" if event.get(GControl.kRun) else "walk_right"
+            elif event.get(GControl.kLeft):
+                if self.direction == "right":
+                    return "turn_left"
+                return "run_left" if event.get(GControl.kRun) else "walk_left"
+            elif event.get(GEvent.kOnGround) and event.get(GControl.kJump):
+                return "jump_left" if self.direction == GControl.kLeft else "jump_right"
+            return "idle_{0}".format(self.direction)
         if event.get(GControl.kRight):
-            if self.direction == "left":
-                return "turn_right"
-            return "run_right" if event.get(GControl.kRun) else "walk_right"
+            self.direction = GControl.kRight
         elif event.get(GControl.kLeft):
-            if self.direction == "right":
-                return "turn_left"
-            return "run_left" if event.get(GControl.kRun) else "walk_left"
-        elif event.get(GEvent.kOnGround) and event.get(GControl.kJump):
-            return "jump_left" if self.direction == GControl.kLeft else "jump_right"
-        return "idle_{0}".format(self.direction)
+            self.direction = GControl.kLeft
+        return None
     
     def on_exit(self, next_state: Optional[str]) -> None:
         self.direction = self.orig_direction
