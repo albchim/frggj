@@ -4,6 +4,7 @@ from frggj.api.mesh import GMesh
 from frggj.api.skeleton import GSkeleton
 from frggj.api.animation import GAnimationTakes
 import json
+import os
 
 
 class GAsset(object):
@@ -20,14 +21,14 @@ class GAsset(object):
             asset_data = json.load(json_data)
             json_data.close()
             self._mesh = GMesh(self)
-            self._mesh.load(asset_data["mesh"])
-            self._texture = import_texture(asset_data["texture"])
+            self._mesh.load(os.path.join(os.path.dirname(filepath), asset_data["mesh"]))
+            self._texture = import_texture(os.path.join(os.path.dirname(filepath), asset_data["texture"]))
             if asset_data["skeleton"]:
                 self._skeleton = GSkeleton(self)
-                self._skeleton.load(asset_data["skeleton"])
+                self._skeleton.load(os.path.join(os.path.dirname(filepath), asset_data["skeleton"]))
             if asset_data["animation"]:
                 self._takes = GAnimationTakes(self)
-                self._takes.load(asset_data["animation"])
+                self._takes.load(os.path.join(os.path.dirname(filepath), asset_data["animation"]))
 
     def get_mesh(self):
         return self._mesh

@@ -1,0 +1,6 @@
+{
+    "mesh": "geo.json",
+    "texture": "color.png",
+    "skeleton": "skeleton.json",
+    "animation": "animation.json"
+}
