@@ -29,7 +29,6 @@ class GState(object):
         return self.current_frame
     
     def set_animation_frames(self, n_frames: int):
-        logging.info("Setting anim frames to {0}: {1}".format(self.name, n_frames))
         self.animation_frames = n_frames
     
     def handle_event(self, event: dict) -> str:
@@ -37,7 +36,6 @@ class GState(object):
         return None
     
     def tick(self) -> bool:
-        # print(self.name, self.animation_frames, self.current_frame)
         if self.animation_frames < 1:
             return True
         elif self.current_frame >= self.animation_frames:
@@ -179,8 +177,6 @@ class AttackState(GState):
                 if self.direction == "right":
                     return "turn_left"
                 return "run_left" if event.get(GControl.kRun) else "walk_left"
-            elif event.get(GEvent.kOnGround) and event.get(GControl.kJump):
-                return "jump_left" if self.direction == GControl.kLeft else "jump_right"
             return "idle_{0}".format(self.direction)
         if event.get(GControl.kRight):
             self.direction = GControl.kRight

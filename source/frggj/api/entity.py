@@ -25,6 +25,7 @@ class GEntity(object):
         self._active = True
         self._active_animation = 0
         self._action_callback = None
+        self._animation_start_time = 0.0
     
     def set_action_callback(self, callback):
         self._action_callback = callback
@@ -75,7 +76,22 @@ class GEntity(object):
         return self._active_animation
     
     def set_active_animation(self, anim_label):
-        self._active_animation = self._asset._anim_map.get(anim_label, 0)
+        anim_index = self._asset._anim_map.get(anim_label, 0)
+        if anim_index != self._active_animation:
+            self._active_animation = anim_index
+            self._animation_start_time = 0
+        
+    def animation_step(self, time):
+        if self._animation_start_time == 0:
+            self._animation_start_time = time
+        asset = self.get_asset()
+        asset_animation = asset.get_animation(self.get_active_animation())
+        if asset_animation:
+            frame = int(0.024 * (time - self._animation_start_time))%asset_animation.get_length()
+            animation_frame = asset_animation.get_frame(frame)
+        else:
+            animation_frame = None
+        return animation_frame
         
     def _init_state_manager(self, states: dict, init_state: str):
         self._state_manager = GStateManager(states, init_state)
@@ -160,13 +176,6 @@ class GEnemy(GEntity):
             self._direction[2] = 1
         elif self._state_manager.get_current_state().direction == "left":
             self._direction[2] = -1
-        # With inertia
-        # if self._state_manager.get_current_state().moving:
-        #     if self._state_manager.get_current_state().name in ["walk", "jump"]:
-        #         self._velocity = 10
-        #     elif self._state_manager.get_current_state().name == "run":
-        #         self._velocity = 15
-        # Without inertia
         self._velocity = 0
         if self._state_manager.get_current_state().name in ["walk", "jump"]:
             self._velocity = 10

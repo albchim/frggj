@@ -106,12 +106,7 @@ class GScene(object):
             else:
                 asset_bindpose = None
                 asset_influences = None
-            asset_animation = asset.get_animation(entity.get_active_animation())
-            if asset_animation:
-                frame = int(0.024 * time)%asset_animation.get_length()
-                animation_frame = asset_animation.get_frame(frame)
-            else:
-                animation_frame = None
+            animation_frame = entity.animation_step(time)
             project_points(asset.get_mesh().get_points(), entity.get_transform().get_matrix(), asset_bindpose, asset_influences, animation_frame, camera_matrix, canvas.size[0], canvas.size[1])
             draw_model(canvas.get_pixels(), asset.get_mesh().get_points(), asset.get_mesh().get_triangles(), asset.get_mesh().get_uvs(), asset.get_texture(), camera_matrix, canvas._z, canvas.size[0], canvas.size[1])
 
