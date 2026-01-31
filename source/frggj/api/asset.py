@@ -15,6 +15,7 @@ class GAsset(object):
         self._skeleton = None
         self._texture = None
         self._takes = None
+        self._anim_map = {}
 
     def load(self, filepath):
         with open(filepath) as json_data:
@@ -29,6 +30,8 @@ class GAsset(object):
             if asset_data["animation"]:
                 self._takes = GAnimationTakes(self)
                 self._takes.load(os.path.join(os.path.dirname(filepath), asset_data["animation"]))
+            if asset_data.get("animation_map") and isinstance(asset_data['animation_map'], dict):
+                self._anim_map = asset_data["animation_map"]
 
     def get_mesh(self):
         return self._mesh
@@ -51,5 +54,5 @@ class GAsset(object):
         else:
             return None
 
-    def set_active_animation(self, index):
-        self._takes.set_active(index)
+    def set_active_animation(self, anim_label):
+        self._takes.set_active(self._anim_map.get(anim_label, 0))

@@ -26,7 +26,7 @@ class GStateManager(object):
     def get_current_state(self) -> GState:
         return self._states[self._current_state]
 
-    def animation_name(self) -> str:
+    def get_animation_name(self) -> str:
         return getattr(self.get_current_state(), "animation_name", self._current_state)
 
     def transition(self, new_state: str) -> None:

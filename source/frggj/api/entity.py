@@ -1,5 +1,6 @@
 # entity
 import numpy as np
+from frggj.api.state_manager import BASE_STATES, GStateManager
 
 
 class GEntityType(object):
@@ -57,19 +58,21 @@ class GEntity(object):
 class GPlayer(GEntity):
     def __init__(self, name, health, asset=None, transform=None):
         super().__init__(name, asset, transform)
+        self._state_manager = GStateManager(BASE_STATES, "idle_right")
+        self._state_manager.start()
         self._health = health
         self._state = None
     
     def update(self, elapsed_time, controls):
         super().update(elapsed_time)
-        if controls["right"]:
+        self._state_manager.handle_event(controls)
+        self._asset.set_active_animation(self._state_manager.get_animation_name())
+        self._velocity = 0
+        if self._state_manager.get_current_state().direction == "right":
             self._direction = np.asarray([0, 0, 1])
-            self._velocity = 1
-            self._asset.set_active_animation(1)
-        if controls["left"]:
+        elif self._state_manager.get_current_state().direction == "left":
             self._direction = np.asarray([0, 0, -1])
+        if self._state_manager.get_current_state().name == "walk":
+            self._velocity = 0.5
+        elif self._state_manager.get_current_state().name == "run":
             self._velocity = 1
-            self._asset.set_active_animation(1)
-        if True not in controls.values():
-            self._asset.set_active_animation(0)
-

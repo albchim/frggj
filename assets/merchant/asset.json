@@ -2,5 +2,6 @@
     "mesh": "geo.json",
     "texture": "color.png",
     "skeleton": "skeleton.json",
-    "animation": "animation.json"
+    "animation": "animation.json",
+    "animation_map": {"idle": 0, "walk": 1, "run": 1}
 }

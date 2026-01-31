@@ -1,6 +1,7 @@
 # engine
 import pygame as pg
 import numpy as np
+from frggj.api.constants import GControl
 from frggj.api.game import GGame
 from frggj.api.canvas import GCanvas
 
@@ -49,15 +50,16 @@ class GEngine(object):
                 if pressed_keys[self._pg.K_RETURN]:
                     self._state = GEngineState.kGame
             if self._state == GEngineState.kGame:
-                self._controls = {"up": False, "down": False, "left": False, "right": False, "jump": False, "action": False}
-                if pressed_keys[ord('w')]:
-                    self._controls["up"] = True
-                if pressed_keys[ord('s')]:
-                    self._controls["down"] = True
-                if pressed_keys[ord('a')]:
-                    self._controls["left"] = True
-                if pressed_keys[ord('d')]:
-                    self._controls["right"] = True
+                self._controls = {GControl.kUp: False, GControl.kDown: False, GControl.kLeft: False, 
+                                  GControl.kRight: False, GControl.kJump: False, GControl.kRun: False, 
+                                  GControl.kAttack: False, GControl.kAction: False}
+                self._controls[GControl.kUp] = pressed_keys[ord('w')]
+                self._controls[GControl.kDown] = pressed_keys[ord('s')]
+                self._controls[GControl.kLeft] = pressed_keys[ord('a')]
+                self._controls[GControl.kRight] = pressed_keys[ord('d')]
+                self._controls[GControl.kJump] = pressed_keys[self._pg.K_SPACE]
+                self._controls[GControl.kRun] = pressed_keys[self._pg.K_LSHIFT]
+                self._controls[GControl.kAction] = pressed_keys[self._pg.K_LCTRL]
                     
             if self._state == GEngineState.kMenu:
                 self._run_menu()
