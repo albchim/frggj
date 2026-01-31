@@ -23,11 +23,19 @@ class GState(object):
     def on_exit(self, next_state: Optional[str]) -> None:
         pass
     
+    def get_frame(self):
+        return self.current_frame
+    
+    def set_animation_frames(self, n_frames: int):
+        print("Setting anim frames to {0}:".format(self.name), n_frames)
+        self.animation_frames = n_frames
+    
     def handle_event(self, event: dict) -> str:
         """Return next state name"""
         return None
     
     def tick(self) -> bool:
+        print(self.name, self.animation_frames, self.current_frame)
         if self.animation_frames < 1:
             return True
         elif self.current_frame >= self.animation_frames:
@@ -58,7 +66,7 @@ class IdleState(GState):
             return "run_left" if event.get(GControl.kRun) else "walk_left"
         elif event == GEvent.kOnGround and event == GControl.kJump:
             return "jump"
-        return "{0}_{1}".format(self.name, self.direction)
+        return None
 
 
 class WalkState(GState):
@@ -74,11 +82,11 @@ class WalkState(GState):
         elif event.get(GControl.kRight):
             if self.direction == "left":
                 return "turn_right"
-            return "run_right" if event.get(GControl.kRun) else "walk_right"
+            return "run_right" if event.get(GControl.kRun) else None
         elif event.get(GControl.kLeft):
             if self.direction == "right":
                 return "turn_left"
-            return "run_left" if event.get(GControl.kRun) else "walk_left"
+            return "run_left" if event.get(GControl.kRun) else None
         elif event == GEvent.kOnGround and event == GControl.kJump:
             return "jump"
         return "idle_{0}".format(self.direction)
@@ -120,11 +128,11 @@ class RunState(GState):
         elif event.get(GControl.kRight):
             if self.direction == "left":
                 return "turn_right"
-            return "run_right" if event.get(GControl.kRun) else "walk_right"
+            return None if event.get(GControl.kRun) else "walk_right"
         elif event.get(GControl.kLeft):
             if self.direction == "right":
                 return "turn_left"
-            return "run_left" if event.get(GControl.kRun) else "walk_left"
+            return None if event.get(GControl.kRun) else "walk_left"
         elif event == GEvent.kOnGround and event == GControl.kJump:
             return "jump"
         return "idle_{0}".format(self.direction)
@@ -139,7 +147,11 @@ class JumpState(GState):
         # if event.get(GEvent.kHit]:
         #     return "hit"
         if not self.tick():
-            return "{0}_{1}".format(self.name, self.direction)
+            if event.get(GControl.kRight):
+                self.direction = GControl.kRight
+            if event.get(GControl.kLeft):
+                self.direction = GControl.kLeft
+            return None
         if event.get(GControl.kAttack):
             return "attack_{0}".format(self.direction)
         if not event.get(GEvent.kOnGround):

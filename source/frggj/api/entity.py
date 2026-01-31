@@ -69,10 +69,18 @@ class GEntity(object):
 class GPlayer(GEntity):
     def __init__(self, name, health, asset=None, transform=None):
         super().__init__(name, asset, transform)
-        self._state_manager = GStateManager(BASE_STATES, "idle_right")
-        self._state_manager.start()
+        self._init_state_manager(self._init_anim_state_frames(BASE_STATES))
         self._health = health
         self._state = None
+    
+    def _init_state_manager(self, states):
+        self._state_manager = GStateManager(BASE_STATES, "idle_right")
+        self._state_manager.start()
+        
+    def _init_anim_state_frames(self, states):
+        for key in states:
+            states[key].set_animation_frames(self.get_asset().get_takes().get_animation(self.get_asset()._anim_map.get(states[key].name, 0)).get_length())
+        return states
     
     def update(self, elapsed_time, controls):
         self._state_manager.handle_event(controls)
@@ -83,9 +91,9 @@ class GPlayer(GEntity):
         elif self._state_manager.get_current_state().direction == "left":
             self._direction = np.asarray([0, 0, -1])
         if self._state_manager.get_current_state().name == "walk":
-            self._velocity = 1.5
+            self._velocity = 10
         elif self._state_manager.get_current_state().name == "run":
-            self._velocity = 3
+            self._velocity = 15
         super().update(elapsed_time)
     
     def get_type(self):
