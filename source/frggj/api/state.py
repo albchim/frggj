@@ -6,10 +6,18 @@ from frggj.api.constants import GEvent, GControl
 class GState(object):
     
     name = None
+    current_frame = 0
     direction = None
     animation_name = None
     
+    def __init__(self, direction, animation_frames: int = 0):
+        if direction not in ["left", "right"]:
+            raise ValueError("Wrong initialization for direction")
+        self.direction = direction
+        self.animation_frames = animation_frames
+    
     def on_enter(self, previous_state: Optional[str]) -> None:
+        self.current_frame = 0.0
         pass
     
     def on_exit(self, next_state: Optional[str]) -> None:
@@ -18,17 +26,21 @@ class GState(object):
     def handle_event(self, event: dict) -> str:
         """Return next state name"""
         return None
+    
+    def tick(self) -> bool:
+        if self.animation_frames < 1:
+            return True
+        elif self.current_frame >= self.animation_frames:
+            return True
+        self.current_frame += 1
+        return False
+        
         
     
 class IdleState(GState):
     
     name = "idle"
     animation_name = "idle"
-    
-    def __init__(self, direction):
-        if direction not in ["left", "right"]:
-            raise ValueError("Wrong initialization for direction")
-        self.direction = direction
     
     def handle_event(self, event: int) -> str:
         """Handles events """
@@ -54,11 +66,6 @@ class WalkState(GState):
     name = "walk"
     animation_name = "walk"
     
-    def __init__(self, direction):
-        if direction not in ["left", "right"]:
-            raise ValueError("Wrong initialization for direction")
-        self.direction = direction
-    
     def handle_event(self, event: int) -> str:
         # if event.get(GEvent.kHit]:
         #     return "hit"
@@ -81,11 +88,6 @@ class TurnState(GState):
     
     name = "turn"
     animation_name = "turn"
-    
-    def __init__(self, direction):
-        if direction not in ["left", "right"]:
-            raise ValueError("Wrong initialization for direction")
-        self.direction = direction
         
     def handle_event(self, event: int) -> str:
         # if event.get(GEvent.kHit]:
@@ -109,11 +111,6 @@ class RunState(GState):
     
     name = "run"
     animation_name = "run"
-    
-    def __init__(self, direction):
-        if direction not in ["left", "right"]:
-            raise ValueError("Wrong initialization for direction")
-        self.direction = direction
             
     def handle_event(self, event: int) -> str:
         # if event.get(GEvent.kHit]:
@@ -137,15 +134,12 @@ class JumpState(GState):
     
     name = "jump"
     animation_name = "jump"
-    
-    def __init__(self, direction):
-        if direction not in ["left", "right"]:
-            raise ValueError("Wrong initialization for direction")
-        self.direction = direction
             
     def handle_event(self, event: int) -> str:
         # if event.get(GEvent.kHit]:
         #     return "hit"
+        if not self.tick():
+            return "{0}_{1}".format(self.name, self.direction)
         if event.get(GControl.kAttack):
             return "attack_{0}".format(self.direction)
         if not event.get(GEvent.kOnGround):
@@ -172,11 +166,6 @@ class AttackState(GState):
     
     name = "attack"
     animation_name = "attack"
-    
-    def __init__(self, direction):
-        if direction not in ["left", "right"]:
-            raise ValueError("Wrong initialization for direction")
-        self.direction = direction
             
     def handle_event(self, event: int) -> str:
         # if event.get(GEvent.kHit]:
