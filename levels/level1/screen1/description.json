@@ -496,24 +496,11 @@
                 0.0
             ]
         },
-        "floorA14": {
-            "asset": "floorA",
-            "translate": [
-                0.0,
-                0.0,
-                280.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
         "floorA15": {
             "asset": "floorA",
             "translate": [
                 0.0,
-                0.0,
+                15.0,
                 300.0
             ],
             "rotation": [
@@ -526,21 +513,8 @@
             "asset": "floorA",
             "translate": [
                 0.0,
-                0.0,
+                15.0,
                 320.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "floorA17": {
-            "asset": "floorA",
-            "translate": [
-                0.0,
-                0.0,
-                340.0
             ],
             "rotation": [
                 0.0,
@@ -552,21 +526,8 @@
             "asset": "floorA",
             "translate": [
                 0.0,
-                0.0,
-                360.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "floorA19": {
-            "asset": "floorA",
-            "translate": [
-                0.0,
-                0.0,
-                380.0
+                30.0,
+                377.0
             ],
             "rotation": [
                 0.0,
@@ -606,6 +567,97 @@
                 0.0,
                 0.0,
                 440.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "stairsA": {
+            "asset": "stairsA",
+            "translate": [
+                0.0,
+                0.0,
+                280.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "stairsB": {
+            "asset": "stairsB",
+            "translate": [
+                0.0,
+                0.0,
+                340.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA23": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                0.0,
+                360.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA24": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                30.0,
+                397.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "stairsA1": {
+            "asset": "stairsA",
+            "translate": [
+                0.0,
+                0.0,
+                379.8636749740392
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "stairsA2": {
+            "asset": "stairsA",
+            "translate": [
+                0.0,
+                15.0,
+                400.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "floorA25": {
+            "asset": "floorA",
+            "translate": [
+                0.0,
+                30.0,
+                357.0
             ],
             "rotation": [
                 0.0,

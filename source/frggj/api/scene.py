@@ -91,7 +91,9 @@ class GScene(object):
 
         # set the player on the ground
         player_translation = player_transform.get_translation()
-        # set_on_ground(player_translation, self._assets[1].get_mesh().get_points(), self._assets[1].get_mesh().get_triangles())
+        platforms = self.get_platforms()
+        for platform in platforms:
+            set_on_ground(player_translation, platform.get_asset().get_mesh().get_points(), platform.get_asset().get_mesh().get_triangles(), platform.get_transform().get_matrix())
         # triangle_indices = np.asarray(range(len(self._assets[1].get_mesh().get_triangles())))
         player_transform.set_translation(player_translation)
 
@@ -112,50 +114,30 @@ class GScene(object):
 
 
 @njit()
-def distance_cull(triangle_indices, points, triangles, camera, max_distance):
-    square_max_distance = max_distance * max_distance
-    counter = 0
-    for triangle_index in range(len(triangles)):
-        inv_index = len(triangles) - triangle_index - 1
-        triangle = triangles[inv_index]
-        p0 = np.asarray([points[triangle[0]][0], 0.0, points[triangle[0]][2]])
-        p1 = np.asarray([points[triangle[1]][0], 0.0, points[triangle[1]][2]])
-        p2 = np.asarray([points[triangle[2]][0], 0.0, points[triangle[2]][2]])
-        camera_2d_pos = np.asarray([camera[0][3], 0.0, camera[2][3]])
-        delta0 = p0 - camera_2d_pos
-        delta1 = p1 - camera_2d_pos
-        delta2 = p2 - camera_2d_pos
-        dist0 = dot_3d(delta0, delta0)
-        dist1 = dot_3d(delta1, delta1)
-        dist2 = dot_3d(delta2, delta2)
-        if min(dist0, dist1, dist2) < square_max_distance:
-            triangle_indices.pop(inv_index)
-
-
-@njit()
-def set_on_ground(point, ground_points, ground_triangles):
-    height = 0.0
+def set_on_ground(point, ground_points, ground_triangles, ground_matrix):
+    height = point[1]
     flat_point = np.asarray([point[0], 0.0, point[2]])
     for triangle in ground_triangles:
-        p0 = ground_points[triangle[0]]
-        p1 = ground_points[triangle[1]]
-        p2 = ground_points[triangle[2]]
+        p0 = mult_3d(ground_matrix, ground_points[triangle[0]]) 
+        p1 = mult_3d(ground_matrix, ground_points[triangle[1]])
+        p2 = mult_3d(ground_matrix, ground_points[triangle[2]])
 
         flat_point0 = np.asarray([p0[0], 0.0, p0[2]])
         flat_point1 = np.asarray([p1[0], 0.0, p1[2]])
         flat_point2 = np.asarray([p2[0], 0.0, p2[2]])
 
         den = (flat_point1[2] - flat_point2[2])*(flat_point0[0] - flat_point2[0]) + (flat_point2[0] - flat_point1[0])*(flat_point0[2] - flat_point2[2])
+        if abs(den) > 0.000001:
+            u = ((flat_point1[2] - flat_point2[2])*(flat_point[0] - flat_point2[0]) + (flat_point2[0] - flat_point1[0])*(flat_point[2] - flat_point2[2])) / den
+            v = ((flat_point2[2] - flat_point0[2])*(flat_point[0] - flat_point2[0]) + (flat_point0[0] - flat_point2[0])*(flat_point[2] - flat_point2[2])) / den
+            w = 1.0 - u - v
 
-        u = ((flat_point1[2] - flat_point2[2])*(flat_point[0] - flat_point2[0]) + (flat_point2[0] - flat_point1[0])*(flat_point[2] - flat_point2[2])) / den
-        v = ((flat_point2[2] - flat_point0[2])*(flat_point[0] - flat_point2[0]) + (flat_point0[0] - flat_point2[0])*(flat_point[2] - flat_point2[2])) / den
-        w = 1.0 - u - v
-
-        eps = 0.00001
-        if (u >= -eps) and (v >= -eps) and (w >= -eps):
-            proj_point = u*p0[:3] + v*p1[:3] + w*p2[:3]
-            height = proj_point[1]
-            break
+            eps = 0.00001
+            if (u >= -eps) and (v >= -eps) and (w >= -eps):
+                proj_point = u*p0[:3] + v*p1[:3] + w*p2[:3]
+                if abs(proj_point[1] - height) <= 3.1:
+                    height = proj_point[1]
+                    break
     point[1] = height
 
 
