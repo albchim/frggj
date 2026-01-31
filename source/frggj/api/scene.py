@@ -65,7 +65,7 @@ class GScene(object):
             else:
                 asset_bindpose = None
                 asset_influences = None
-            asset_animation = asset.get_active_animation()
+            asset_animation = asset.get_animation(entity.get_active_animation())
             if asset_animation:
                 frame = int(0.024 * time)%asset_animation.get_length()
                 animation_frame = asset_animation.get_frame(frame)

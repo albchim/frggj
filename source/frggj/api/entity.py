@@ -18,6 +18,7 @@ class GEntity(object):
         self._direction = np.asarray([0, 0, 1])
         self._velocity = 0
         self._active = True
+        self._active_animation = 0
     
     def update(self, elapsed_time):
         if self._velocity > 0:
@@ -56,6 +57,12 @@ class GEntity(object):
     
     def get_asset(self):
         return self._asset
+    
+    def get_active_animation(self):
+        return self._active_animation
+    
+    def set_active_animation(self, index):
+        self._active_animation = index
 
 
 class GPlayer(GEntity):
@@ -68,13 +75,13 @@ class GPlayer(GEntity):
         if controls["right"]:
             self._direction = np.asarray([0, 0, 1])
             self._velocity = 10.0
-            self._asset.set_active_animation(1)
+            self._active_animation = 1
         if controls["left"]:
             self._direction = np.asarray([0, 0, -1])
             self._velocity = 10.0
-            self._asset.set_active_animation(1)
+            self._active_animation = 1
         if True not in controls.values() and self._velocity == 0.0:
-            self._asset.set_active_animation(0)
+            self._active_animation = 0
         super().update(elapsed_time)
     
     def get_type(self):
@@ -87,7 +94,7 @@ class GEnemy(GEntity):
         self._health = health
         self._state = None
         self._velocity = 0.0
-        self._asset.set_active_animation(1)
+        self._active_animation = 1
     
     def update(self, elapsed_time):
         self._velocity = 10.0

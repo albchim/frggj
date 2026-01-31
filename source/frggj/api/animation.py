@@ -20,6 +20,9 @@ class GAnimationTakes(object):
 
     def add_animation(self, animation):
         self._takes.append(animation)
+    
+    def get_animation(self, index):
+        return self._takes[index]
 
     def load(self, filepath):
         takes_data = import_takes(filepath)
