@@ -40,7 +40,7 @@ class GStateManager(object):
         self._states[new_state].on_enter(prev)
         logging.info("Changing from state {0} to {1} ".format(prev, new_state))
 
-    def handle_event(self, event: dict) -> None:
-        nxt = self.get_current_state().handle_event(event)
+    def handle_event(self, event: dict, elapsed_time: float) -> None:
+        nxt = self.get_current_state().handle_event(event, elapsed_time)
         if nxt:
             self.transition(nxt)

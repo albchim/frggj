@@ -22,6 +22,7 @@ class GEntity(object):
         self._transform = transform
         self._direction = np.asarray([0, 0, 1])
         self._velocity = 0
+        self._y_velocity = 0
         self._active = True
         self._active_animation = 0
         self._action_callback = None
@@ -35,15 +36,21 @@ class GEntity(object):
             self._action_callback(*args)
     
     def update(self, elapsed_time):
+        translation = self._transform.get_translation()
+        # translation += 0.5*np.array([0.0, -9.8, 0.0])*(elapsed_time**2)
+        if self._y_velocity > 0:
+            y_translation = np.array([0.0, 1.0, 0.0]) * self._y_velocity + 0.5*np.array([0.0, -9.8, 0.0])*(elapsed_time**2)
+            translation += y_translation
+            self._y_velocity = self._y_velocity - elapsed_time * 9.8
         if self._velocity > 0:
-            translation = self._transform.get_translation()
-            translation += self._direction * self._velocity * elapsed_time
-            self._transform.set_translation(translation)
+            x_translation = self._direction * self._velocity * elapsed_time
+            translation += x_translation
             self._velocity = max(self._velocity - elapsed_time * 50.0, 0)
             if self._direction[2] > 0:
                 self._transform.set_eulers([0.0, 0.0, 0.0])
             if self._direction[2] < 0:
                 self._transform.set_eulers([0.0, 180.0, 0.0])
+        self._transform.set_translation(translation)
     
     def set_name(self, name):
         self._name = name
@@ -89,6 +96,8 @@ class GEntity(object):
         if asset_animation:
             frame = int(0.024 * (time - self._animation_start_time))%asset_animation.get_length()
             animation_frame = asset_animation.get_frame(frame)
+            # if self.get_type() == GEntityType.kPlayer and self._state_manager.get_current_state().name == 'attack':
+            #     print(self.get_type(), time, self._animation_start_time, frame)
         else:
             animation_frame = None
         return animation_frame
@@ -116,7 +125,8 @@ class GCollideableMixin(object):
             increment = -0.5 if player._direction[2] > 0 else +0.5
             player.get_transform().set_translation([player.get_transform().get_translation()[0], player.get_transform().get_translation()[1], player.get_transform().get_translation()[2] + increment])
             player._state_manager.handle_event({GEvent.kStop: True, 
-                                                player._state_manager.get_current_state().direction: False})
+                                                player._state_manager.get_current_state().direction: False},
+                                                elapsed_time = 0.0)
             return True
         else:
             return False
@@ -139,12 +149,15 @@ class GPlayer(GEntity):
         controls[GEvent.kStop] = self._velocity < 1.0
         if controls[GControl.kJump]:
             self._in_air_counter = 0
-        self._state_manager.handle_event(controls)
+        self._state_manager.handle_event(controls, elapsed_time)
         self.set_active_animation(self._state_manager.get_animation_name())
         if self._state_manager.get_current_state().direction == "right":
             self._direction[2] = 1
         elif self._state_manager.get_current_state().direction == "left":
             self._direction[2] = -1
+            
+        # if self._y_velocity == 0.0 and self._state_manager.get_current_state().name == "jump":
+        #     self._y_velocity = 3
         if self._state_manager.get_current_state().moving:
             if self._state_manager.get_current_state().name in ["walk", "jump"]:
                 self._velocity = 30
@@ -170,7 +183,7 @@ class GEnemy(GEntity):
         return {}
     
     def update(self, elapsed_time, player):
-        self._state_manager.handle_event(self.brain(player))
+        self._state_manager.handle_event(self.brain(player), elapsed_time)
         self.set_active_animation(self._state_manager.get_animation_name())
         if self._state_manager.get_current_state().direction == "right":
             self._direction[2] = 1
